@@ -3,15 +3,9 @@ import com.clinica.agendamento_consulta_medica.entities.pk.PrescriptionPk;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.*;
 import java.io.Serializable;
 
 
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "tb_prescription_item")
 public class PrescriptionItem implements Serializable {
@@ -41,4 +35,28 @@ public class PrescriptionItem implements Serializable {
         id.setMedications(medications);
     }
 
+
+    public PrescriptionPk getId() {
+        return id;
+    }
+
+    public void setId(PrescriptionPk id) {
+        this.id = id;
+    }
+
+    public String getDosagem() {
+        return dosagem;
+    }
+
+    public void setDosagem(String dosagem) {
+        this.dosagem = dosagem;
+    }
+
+    public String getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
+    }
 }

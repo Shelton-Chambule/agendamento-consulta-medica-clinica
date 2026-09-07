@@ -14,6 +14,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -59,8 +61,8 @@ public class ConsultationService {
         }
 
         Consultation consultation = new Consultation();
-        consultation.setMoment(consultationDto.getMoment());
-        consultation.setDate(consultationDto.getDate());
+        consultation.setMoment(LocalDateTime.now());
+        consultation.setDate(LocalDate.now());
         consultation.setDuration(consultationDto.getDuration());
         consultation.setStarTime(starTime);
         consultation.setDoctor(doctor);

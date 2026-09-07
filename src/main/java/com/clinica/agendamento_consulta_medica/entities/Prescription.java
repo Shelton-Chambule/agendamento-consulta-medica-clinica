@@ -1,15 +1,9 @@
 package com.clinica.agendamento_consulta_medica.entities;
 import jakarta.persistence.*;
-import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-@Setter
-@Getter
 @Entity
 @Table(name = "tb_prescription")
 public class Prescription implements Serializable {
@@ -28,11 +22,8 @@ public class Prescription implements Serializable {
     @OneToMany(mappedBy = "prescription")
     private Set<Medications> medications = new HashSet<>();
 
-
-    @Builder.Default
     @OneToMany(mappedBy = "id.prescription")
     private List<PrescriptionItem> prescriptionItem = new ArrayList<>();
-
 
     @Override
     public boolean equals(Object o) {
@@ -48,5 +39,49 @@ public class Prescription implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setValidity(LocalDate validity) {
+        this.validity = validity;
+    }
+
+    public void setObservations(String observations) {
+        this.observations = observations;
+    }
+
+    public void setConsultation(Consultation consultation) {
+        this.consultation = consultation;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public LocalDate getValidity() {
+        return validity;
+    }
+
+    public String getObservations() {
+        return observations;
+    }
+
+    public Consultation getConsultation() {
+        return consultation;
+    }
+
+    public Set<Medications> getMedications() {
+        return medications;
     }
 }

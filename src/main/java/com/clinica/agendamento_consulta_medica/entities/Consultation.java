@@ -1,37 +1,25 @@
 package com.clinica.agendamento_consulta_medica.entities;
+
 import com.clinica.agendamento_consulta_medica.entities.enums.StatusConsultation;
 import jakarta.persistence.*;
-import lombok.*;
+
 import java.io.Serializable;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
 
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+
 @Entity
 @Table(name = "tb_consultation")
 public class Consultation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_consultation")
     private Long id;
-
-    @Column(name = "moment")
-    private Instant moment;
-
-    @Column(name = "date")
+    private LocalDateTime moment;
     private LocalDate date;
-
-    @Column(name = "startTime")
     private LocalTime starTime;
-
-    @Column(name = "duration")
     private Integer duration;
 
     @OneToOne(mappedBy = "consultation")
@@ -51,6 +39,87 @@ public class Consultation implements Serializable {
     @JoinColumn(name = "id_patient")
     private Patient patient;
 
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public StatusConsultation getStatusConsultation() {
+        return statusConsultation;
+    }
+
+    public void setStatusConsultation(StatusConsultation statusConsultation) {
+        this.statusConsultation = statusConsultation;
+    }
+
+    public HistoryPatient getHistoryPatient() {
+        return historyPatient;
+    }
+
+    public void setHistoryPatient(HistoryPatient historyPatient) {
+        this.historyPatient = historyPatient;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setMoment(LocalDateTime moment) {
+        this.moment = moment;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public void setStarTime(LocalTime starTime) {
+        this.starTime = starTime;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public void setRevenue(Prescription revenue) {
+        this.revenue = revenue;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getMoment() {
+        return moment;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public LocalTime getStarTime() {
+        return starTime;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public Prescription getRevenue() {
+        return revenue;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -63,4 +132,13 @@ public class Consultation implements Serializable {
         return Objects.hashCode(id);
     }
 
+    @PrePersist
+    public void moment() {
+        this.moment = LocalDateTime.now();
+    }
+
+    @PrePersist
+    public void date() {
+        this.date = LocalDate.now();
+    }
 }

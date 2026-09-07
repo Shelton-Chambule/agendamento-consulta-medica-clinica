@@ -1,6 +1,5 @@
 package com.clinica.agendamento_consulta_medica.entities;
 import jakarta.persistence.*;
-import lombok.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -8,11 +7,6 @@ import java.util.Objects;
 import java.util.Set;
 
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
-@Getter
 @Entity
 @Table(name = "tb_hours_Doctor")
 public class MedicalSchedule {
@@ -25,7 +19,6 @@ public class MedicalSchedule {
     private LocalTime endTime;
     private LocalTime breakTimes;
 
-    @Builder.Default
     @Enumerated(EnumType.STRING)
     private Set<DayOfWeek> dayOfWeek = new HashSet<>();
 
@@ -43,5 +36,45 @@ public class MedicalSchedule {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setStarTime(LocalTime starTime) {
+        this.starTime = starTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setBreakTimes(LocalTime breakTimes) {
+        this.breakTimes = breakTimes;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public LocalTime getStarTime() {
+        return starTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public LocalTime getBreakTimes() {
+        return breakTimes;
+    }
+
+    public Set<DayOfWeek> getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
     }
 }

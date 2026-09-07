@@ -4,12 +4,8 @@ import com.clinica.agendamento_consulta_medica.entities.Prescription;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Getter;
-import lombok.Setter;
 import java.util.Objects;
 
-@Setter
-@Getter
 @Embeddable
 public class PrescriptionPk {
 
@@ -31,5 +27,22 @@ public class PrescriptionPk {
     @Override
     public int hashCode() {
         return Objects.hash(prescription, medications);
+    }
+
+
+    public Prescription getPrescription() {
+        return prescription;
+    }
+
+    public void setPrescription(Prescription prescription) {
+        this.prescription = prescription;
+    }
+
+    public Medications getMedications() {
+        return medications;
+    }
+
+    public void setMedications(Medications medications) {
+        this.medications = medications;
     }
 }

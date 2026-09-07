@@ -1,14 +1,7 @@
 package com.clinica.agendamento_consulta_medica.resource.exception;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import java.time.Instant;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
+
 public class StandardError {
 
     private Instant timeStamp;
@@ -16,4 +9,52 @@ public class StandardError {
     private String error;
     private String message;
     private String path;
+
+    public StandardError(Instant timeStamp, Integer status, String error, String message, String path) {
+        this.timeStamp = timeStamp;
+        this.status = status;
+        this.error = error;
+        this.message = message;
+        this.path = path;
+    }
+
+    public Instant getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Instant timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 }

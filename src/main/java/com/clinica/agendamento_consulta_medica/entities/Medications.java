@@ -1,13 +1,7 @@
 package com.clinica.agendamento_consulta_medica.entities;
 import jakarta.persistence.*;
-import lombok.*;
 import java.util.*;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Entity
 @Table(name = "tb_medications")
 public class Medications {
@@ -17,7 +11,6 @@ public class Medications {
     private Long id;
     private String name;
 
-    @Builder.Default
     @OneToMany(mappedBy = "id.medications")
     private List<PrescriptionItem>  prescriptionItem = new ArrayList<>();
 
@@ -32,8 +25,36 @@ public class Medications {
         return Objects.equals(id, that.id);
     }
 
+    public void setPrescription(Prescription prescription) {
+        this.prescription = prescription;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<PrescriptionItem> getPrescriptionItem() {
+        return prescriptionItem;
+    }
+
+    public Prescription getPrescription() {
+        return prescription;
     }
 }
