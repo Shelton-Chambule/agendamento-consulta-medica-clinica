@@ -27,6 +27,16 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor")
     private Set<MedicalSchedule> medicalSchedules = new HashSet<>();
 
+    public Doctor(){}
+
+    public Doctor(Long doctorId, String name, String email, String phone, String password) {
+        this.doctorId = doctorId;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

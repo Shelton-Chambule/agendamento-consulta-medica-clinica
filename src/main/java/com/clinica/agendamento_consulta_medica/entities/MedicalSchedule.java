@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-
 @Entity
 @Table(name = "tb_hours_Doctor")
 public class MedicalSchedule {
@@ -25,6 +24,17 @@ public class MedicalSchedule {
     @ManyToOne
     @JoinColumn(name = "id_doctor")
     private Doctor doctor;
+
+    public MedicalSchedule(){}
+
+    public MedicalSchedule(Long id, LocalTime starTime, LocalTime endTime, LocalTime breakTimes, Set<DayOfWeek> dayOfWeek, Doctor doctor) {
+        this.id = id;
+        this.starTime = starTime;
+        this.endTime = endTime;
+        this.breakTimes = breakTimes;
+        this.dayOfWeek = dayOfWeek;
+        this.doctor = doctor;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -77,4 +87,5 @@ public class MedicalSchedule {
     public Doctor getDoctor() {
         return doctor;
     }
+
 }

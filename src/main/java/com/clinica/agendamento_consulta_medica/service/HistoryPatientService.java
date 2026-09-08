@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @Service
 public class HistoryPatientService {
 
-
     private final HistoryPatientRepository historyPatientRepository;
 
     public HistoryPatientService(HistoryPatientRepository historyPatientRepository) {

@@ -1,14 +1,11 @@
 package com.clinica.agendamento_consulta_medica.entities;
-
 import com.clinica.agendamento_consulta_medica.entities.enums.StatusConsultation;
 import jakarta.persistence.*;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
-
 
 @Entity
 @Table(name = "tb_consultation")
@@ -39,6 +36,16 @@ public class Consultation implements Serializable {
     @JoinColumn(name = "id_patient")
     private Patient patient;
 
+    public Consultation(){}
+
+    public Consultation(Long id, LocalDateTime moment, LocalDate date, LocalTime starTime, Integer duration, StatusConsultation statusConsultation) {
+        this.id = id;
+        this.moment = moment;
+        this.date = date;
+        this.starTime = starTime;
+        this.duration = duration;
+        this.statusConsultation = statusConsultation;
+    }
 
     public Doctor getDoctor() {
         return doctor;
@@ -137,8 +144,4 @@ public class Consultation implements Serializable {
         this.moment = LocalDateTime.now();
     }
 
-    @PrePersist
-    public void date() {
-        this.date = LocalDate.now();
-    }
 }

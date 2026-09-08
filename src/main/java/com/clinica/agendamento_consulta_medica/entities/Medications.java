@@ -18,6 +18,14 @@ public class Medications {
     @JoinColumn(name = "id_prescription")
     private Prescription prescription;
 
+    public Medications(){}
+
+    public Medications(Prescription prescription, String name, Long id) {
+        this.prescription = prescription;
+        this.name = name;
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

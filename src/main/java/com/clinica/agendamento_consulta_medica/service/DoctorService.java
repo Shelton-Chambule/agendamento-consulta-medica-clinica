@@ -1,5 +1,5 @@
 package com.clinica.agendamento_consulta_medica.service;
-import com.clinica.agendamento_consulta_medica.dto.doctor.DoctorDto;
+import com.clinica.agendamento_consulta_medica.dto.doctor.DoctorRequestDTO;
 import com.clinica.agendamento_consulta_medica.entities.Doctor;
 import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
 import com.clinica.agendamento_consulta_medica.service.exception.DataBaseException;
@@ -20,24 +20,24 @@ public class DoctorService {
         this.doctorRepository = doctorRepository;
     }
 
-    public DoctorDto save(DoctorDto doctor) {
+    public DoctorRequestDTO save(DoctorRequestDTO doctor) {
         Doctor doctor1 = new Doctor();
         doctor1.setDoctorId(doctor.getId());
         doctor1.setName(doctor.getName());
         doctor1.setPhone(doctor.getPhone());
         doctor1.setEmail(doctor.getEmail());
         doctorRepository.save(doctor1);
-        return new DoctorDto(doctor1);
+        return new DoctorRequestDTO(doctor1);
     }
 
-    public List<DoctorDto> findAll() {
+    public List<DoctorRequestDTO> findAll() {
         List<Doctor> doctors = doctorRepository.findAll();
-        return doctors.stream().map(DoctorDto::new).collect(Collectors.toList());
+        return doctors.stream().map(DoctorRequestDTO::new).collect(Collectors.toList());
     }
 
-    public DoctorDto findById(Long id) {
+    public DoctorRequestDTO findById(Long id) {
         Optional<Doctor> doctor = doctorRepository.findById(id);
-        return new DoctorDto(doctor.orElseThrow(() -> new ResourceNotFoundException(id)));
+        return new DoctorRequestDTO(doctor.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
 
@@ -52,18 +52,18 @@ public class DoctorService {
         }
     }
 
-    public DoctorDto update(Long id, DoctorDto doctor) {
+    public DoctorRequestDTO update(Long id, DoctorRequestDTO doctor) {
         try {
             Doctor doctor1 = doctorRepository.getReferenceById(id);
             updateDate(doctor1, doctor);
             doctorRepository.save(doctor1);
-            return new DoctorDto(doctor1);
+            return new DoctorRequestDTO(doctor1);
         }catch (EntityNotFoundException e){
             throw new ResourceNotFoundException(id);
         }
     }
 
-    private void updateDate(Doctor doctor1, DoctorDto doctor) {
+    private void updateDate(Doctor doctor1, DoctorRequestDTO doctor) {
         doctor1.setName(doctor.getName());
         doctor1.setEmail(doctor.getEmail());
         doctor1.setPhone(doctor.getPhone());

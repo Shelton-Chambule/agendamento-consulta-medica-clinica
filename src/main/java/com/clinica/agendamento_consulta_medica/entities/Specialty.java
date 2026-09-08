@@ -1,7 +1,5 @@
 package com.clinica.agendamento_consulta_medica.entities;
-
 import jakarta.persistence.*;
-
 import java.util.*;
 import java.util.ArrayList;
 
@@ -18,6 +16,13 @@ public class Specialty {
     @ManyToMany(mappedBy = "specialties")
     private List<Doctor> doctors = new ArrayList<>();
 
+    public Specialty(){}
+
+    public Specialty(Long id, String name, Double price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
 
     @Override
     public boolean equals(Object o) {

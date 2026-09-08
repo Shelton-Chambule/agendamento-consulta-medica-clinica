@@ -5,9 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class ConsultationDto {
+public class ConsultationRequestDTO {
 
-    private Long Id;
     private LocalDateTime moment;
     private LocalDate date;
     private LocalTime starTime;
@@ -16,24 +15,16 @@ public class ConsultationDto {
     private Long doctor;
     private StatusConsultation statusConsultation;
 
-    public ConsultationDto(Consultation consultation) {
-        Id = consultation.getId();
+    public ConsultationRequestDTO(Consultation consultation) {
         moment = consultation.getMoment();
         date = consultation.getDate();
         starTime = consultation.getStarTime();
         duration = consultation.getDuration();
-        patient = consultation.getP;
+        patient = consultation.getPatient().getPatientId();
         statusConsultation = consultation.getStatusConsultation();
         doctor = consultation.getDoctor().getDoctorId();
     }
 
-    public Long getId() {
-        return Id;
-    }
-
-    public void setId(Long id) {
-        Id = id;
-    }
 
     public LocalDateTime getMoment() {
         return moment;

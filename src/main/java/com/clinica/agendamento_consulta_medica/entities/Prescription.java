@@ -25,6 +25,16 @@ public class Prescription implements Serializable {
     @OneToMany(mappedBy = "id.prescription")
     private List<PrescriptionItem> prescriptionItem = new ArrayList<>();
 
+    public Prescription(){}
+
+    public Prescription(Long id, LocalDate date, LocalDate validity, String observations, Consultation consultation) {
+        this.id = id;
+        this.date = date;
+        this.validity = validity;
+        this.observations = observations;
+        this.consultation = consultation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

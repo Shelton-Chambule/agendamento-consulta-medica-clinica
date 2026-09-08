@@ -1,10 +1,11 @@
 package com.clinica.agendamento_consulta_medica.resource;
-import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationDto;
+import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationRequestDTO;
+import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationResponseDTO;
 import com.clinica.agendamento_consulta_medica.service.ConsultationService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -17,34 +18,34 @@ public class ConsultationResource {
         this.consultationService = consultationService;
     }
 
-    @PostMapping
-    public ResponseEntity<ConsultationDto>  save(@RequestBody ConsultationDto consultation){
-        ConsultationDto consultations = consultationService.save(consultation);
-        URI uri  = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(consultation.getId()).toUri();
-        return ResponseEntity.created(uri).body(consultations);
+    @PostMapping("/save")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<ConsultationResponseDTO>  save( @Valid  @RequestBody ConsultationRequestDTO consultation){
+        ConsultationResponseDTO consultations = consultationService.save(consultation);
+        return ResponseEntity.ok().body(consultations);
     }
 
     @GetMapping
-    public ResponseEntity<List<ConsultationDto>> findAll(){
-        List<ConsultationDto> consultation = consultationService.findAll();
+    public ResponseEntity<List<ConsultationResponseDTO>> findAll(){
+        List<ConsultationResponseDTO> consultation = consultationService.findAll();
         return ResponseEntity.ok().body(consultation);
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ConsultationDto> findById(@PathVariable Long id){
-        ConsultationDto consultation = consultationService.findById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<ConsultationResponseDTO> findById(@PathVariable Long id){
+        ConsultationResponseDTO consultation = consultationService.findById(id);
         return ResponseEntity.ok().body(consultation);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     public  ResponseEntity<Void> deleteById(@PathVariable Long id){
         consultationService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<ConsultationDto> update(@PathVariable Long id, @RequestBody ConsultationDto consultation){
-        ConsultationDto consultation1 = consultationService.update(id, consultation);
+    @PutMapping("/{id}")
+    public ResponseEntity<ConsultationResponseDTO> update(@PathVariable Long id,  @Valid @RequestBody ConsultationRequestDTO consultation){
+        ConsultationResponseDTO consultation1 = consultationService.update(id, consultation);
         return ResponseEntity.ok().body(consultation1);
     }
 }

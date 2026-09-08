@@ -6,7 +6,7 @@ import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Set;
 
-public class DoctorDto {
+public class DoctorRequestDTO {
 
     private Long id;
     private String name;
@@ -15,7 +15,7 @@ public class DoctorDto {
     private List<String> specialtyDto;
     private List<Set<DayOfWeek>> medicalSchedule;
 
-    public DoctorDto(Doctor doctor) {
+    public DoctorRequestDTO(Doctor doctor) {
         id = doctor.getDoctorId();
         name = doctor.getName();
         email = doctor.getEmail();

@@ -1,5 +1,6 @@
 package com.clinica.agendamento_consulta_medica.service;
-import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationDto;
+import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationRequestDTO;
+import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationResponseDTO;
 import com.clinica.agendamento_consulta_medica.entities.Consultation;
 import com.clinica.agendamento_consulta_medica.entities.Doctor;
 import com.clinica.agendamento_consulta_medica.entities.Patient;
@@ -48,7 +49,7 @@ public class ConsultationService {
         return false;
     }
 
-    public ConsultationDto save(ConsultationDto consultationDto) {
+    public ConsultationResponseDTO save(ConsultationRequestDTO consultationDto) {
 
         Doctor doctor = doctorRepository.getReferenceById(consultationDto.getDoctor());
         Patient patient = patientRepository.getReferenceById(consultationDto.getPatient());
@@ -69,17 +70,17 @@ public class ConsultationService {
         consultation.setPatient(patient);
         consultation.setStatusConsultation(StatusConsultation.WAITING);
         consulationRepository.save(consultation);
-        return new ConsultationDto(consultation);
+        return new ConsultationResponseDTO(consultation);
     }
 
-    public List<ConsultationDto> findAll() {
+    public List<ConsultationResponseDTO> findAll() {
         List<Consultation> consultation = consulationRepository.findAll();
-        return consultation.stream().map(ConsultationDto::new).collect(Collectors.toList());
+        return consultation.stream().map(ConsultationResponseDTO::new).collect(Collectors.toList());
     }
 
-    public ConsultationDto findById(Long id) {
+    public ConsultationResponseDTO findById(Long id) {
         Optional<Consultation> consultation = consulationRepository.findById(id);
-        return new ConsultationDto(consultation.orElseThrow(() -> new ResourceNotFoundException(id)));
+        return new ConsultationResponseDTO(consultation.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
     public void deleteById(Long id) {
@@ -96,18 +97,18 @@ public class ConsultationService {
         }
     }
 
-    public ConsultationDto update(Long id, ConsultationDto consultation) {
+    public ConsultationResponseDTO update(Long id, ConsultationRequestDTO consultation) {
         try {
             Consultation consultation1 = consulationRepository.getReferenceById(id);
             updateData(consultation1, consultation);
             consulationRepository.save(consultation1);
-            return new ConsultationDto(consultation1);
+            return new ConsultationResponseDTO(consultation1);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
     }
 
-    private void updateData(Consultation consultation1, ConsultationDto consultation) {
+    private void updateData(Consultation consultation1, ConsultationRequestDTO consultation) {
         consultation1.setStarTime(consultation.getStarTime());
         consultation1.setDate(consultation.getDate());
     }

@@ -25,6 +25,14 @@ public class HistoryPatient {
         return Objects.equals(id, that.id);
     }
 
+    public HistoryPatient(){}
+
+    public HistoryPatient(Long id, Consultation consultations, StatusConsultation statusConsultation) {
+        this.id = id;
+        this.consultations = consultations;
+        this.statusConsultation = statusConsultation;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hashCode(id);

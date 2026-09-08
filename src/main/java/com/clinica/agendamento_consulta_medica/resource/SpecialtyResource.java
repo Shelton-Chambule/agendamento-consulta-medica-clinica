@@ -1,5 +1,5 @@
 package com.clinica.agendamento_consulta_medica.resource;
-import com.clinica.agendamento_consulta_medica.dto.specialty.SpecialtyDto;
+import com.clinica.agendamento_consulta_medica.dto.specialty.SpecialtyRequestDTO;
 import com.clinica.agendamento_consulta_medica.service.SpecialtyService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,21 +18,21 @@ public class SpecialtyResource {
     }
 
     @PostMapping
-    public ResponseEntity<SpecialtyDto> save(@RequestBody SpecialtyDto specialty){
-        SpecialtyDto specialtys = especialtyService.save(specialty);
+    public ResponseEntity<SpecialtyRequestDTO> save(@RequestBody SpecialtyRequestDTO specialty){
+        SpecialtyRequestDTO specialtys = especialtyService.save(specialty);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(specialty.getId()).toUri();
         return ResponseEntity.created(uri).body(specialtys);
     }
 
     @GetMapping
-    public ResponseEntity<List<SpecialtyDto>> findAll(){
-        List<SpecialtyDto> specialty = especialtyService.findAll();
+    public ResponseEntity<List<SpecialtyRequestDTO>> findAll(){
+        List<SpecialtyRequestDTO> specialty = especialtyService.findAll();
         return ResponseEntity.ok().body(specialty);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<SpecialtyDto> findById(@PathVariable Long id){
-        SpecialtyDto specialty = especialtyService.findById(id);
+    public ResponseEntity<SpecialtyRequestDTO> findById(@PathVariable Long id){
+        SpecialtyRequestDTO specialty = especialtyService.findById(id);
         return ResponseEntity.ok().body(specialty);
     }
 
@@ -42,8 +42,8 @@ public class SpecialtyResource {
         return ResponseEntity.noContent().build();
     }
     @PutMapping(value = "/{id}")
-    public  ResponseEntity<SpecialtyDto> update(@PathVariable Long id, @RequestBody SpecialtyDto specialty){
-        SpecialtyDto specialty1 = especialtyService.update(id,specialty);
+    public  ResponseEntity<SpecialtyRequestDTO> update(@PathVariable Long id, @RequestBody SpecialtyRequestDTO specialty){
+        SpecialtyRequestDTO specialty1 = especialtyService.update(id,specialty);
         return ResponseEntity.ok().body(specialty1);
     }
 

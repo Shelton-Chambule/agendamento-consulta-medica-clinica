@@ -26,6 +26,16 @@ public class Patient {
         return Objects.equals(patientId, patient.patientId);
     }
 
+    public Patient(){}
+
+    public Patient(Long patientId, String name, String email, String phone, String password) {
+        this.patientId = patientId;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.password = password;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hashCode(patientId);

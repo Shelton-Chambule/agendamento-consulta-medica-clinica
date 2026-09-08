@@ -15,6 +15,8 @@ public class PrescriptionItem implements Serializable {
     private String dosagem;
     private String frequency;
 
+    public PrescriptionItem(){}
+
     public PrescriptionItem(Prescription prescription , Medications medications , String dosagem , String frequency) {
         id.setPrescription(prescription);
         id.setMedications( medications);
