@@ -1,5 +1,5 @@
 package com.clinica.agendamento_consulta_medica.service;
-import com.clinica.agendamento_consulta_medica.dto.medication.MedicationDto;
+import com.clinica.agendamento_consulta_medica.dto.medication.MedicationRequestDTO;
 import com.clinica.agendamento_consulta_medica.entities.Medications;
 import com.clinica.agendamento_consulta_medica.repository.MedicationRepository;
 import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
@@ -18,21 +18,21 @@ public class MedicationService {
         this.medicationRepository = medicationRepository;
     }
 
-    public MedicationDto save( MedicationDto medicationDto){
+    public MedicationRequestDTO save(MedicationRequestDTO medicationDto){
         Medications medications = new Medications();
         medications.setName(medicationDto.getName());
         medicationRepository.save(medications);
-        return new MedicationDto(medications);
+        return new MedicationRequestDTO(medications);
     }
 
-    public List<MedicationDto> findAll(){
+    public List<MedicationRequestDTO> findAll(){
         List<Medications> medications = medicationRepository.findAll();
-        return medications.stream().map(MedicationDto::new).collect(Collectors.toList());
+        return medications.stream().map(MedicationRequestDTO::new).collect(Collectors.toList());
     }
 
-    public MedicationDto findById(Long id){
+    public MedicationRequestDTO findById(Long id){
         Optional<Medications> medications = medicationRepository.findById(id);
-        return new MedicationDto(medications.orElseThrow(() -> new ResourceNotFoundException(id)));
+        return new MedicationRequestDTO(medications.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
     public void  deleteById(Long id){
@@ -42,18 +42,18 @@ public class MedicationService {
         medicationRepository.deleteById(id);
     }
 
-    public MedicationDto update(MedicationDto medicationDto, Long id){
+    public MedicationRequestDTO update(MedicationRequestDTO medicationDto, Long id){
         try{
             Medications medications =  medicationRepository.getReferenceById(id);
             updateData(medications, medicationDto);
             medicationRepository.save(medications);
-            return new MedicationDto(medications);
+            return new MedicationRequestDTO(medications);
         }catch (EntityNotFoundException e){
             throw new ResourceNotFoundException(id);
         }
     }
 
-    private void updateData(Medications medications, MedicationDto medicationDto) {
+    private void updateData(Medications medications, MedicationRequestDTO medicationDto) {
         medications.setName(medicationDto.getName());
     }
 }

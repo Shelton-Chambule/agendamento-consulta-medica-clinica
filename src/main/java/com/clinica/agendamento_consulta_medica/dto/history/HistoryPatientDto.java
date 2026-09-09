@@ -3,7 +3,6 @@ import com.clinica.agendamento_consulta_medica.entities.HistoryPatient;
 import com.clinica.agendamento_consulta_medica.entities.enums.StatusConsultation;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
 public class HistoryPatientDto {
 
     private Long id;
@@ -13,7 +12,6 @@ public class HistoryPatientDto {
     private LocalDate date;
     private Integer duration;
     private StatusConsultation statusConsultation;
-
 
     public HistoryPatientDto(HistoryPatient historyPatient) {
         id = historyPatient.getId();

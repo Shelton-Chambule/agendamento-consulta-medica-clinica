@@ -25,7 +25,7 @@ public class ConsultationResource {
         return ResponseEntity.ok().body(consultations);
     }
 
-    @GetMapping
+    @GetMapping("/findAll")
     public ResponseEntity<List<ConsultationResponseDTO>> findAll(){
         List<ConsultationResponseDTO> consultation = consultationService.findAll();
         return ResponseEntity.ok().body(consultation);

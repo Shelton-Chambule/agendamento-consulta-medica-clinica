@@ -1,5 +1,6 @@
 package com.clinica.agendamento_consulta_medica.service;
-import com.clinica.agendamento_consulta_medica.dto.patient.PatientDto;
+import com.clinica.agendamento_consulta_medica.dto.patient.PatientRequestDTO;
+import com.clinica.agendamento_consulta_medica.dto.patient.PatientResponseDTO;
 import com.clinica.agendamento_consulta_medica.entities.Patient;
 import com.clinica.agendamento_consulta_medica.repository.PatientRepository;
 import com.clinica.agendamento_consulta_medica.service.exception.DataBaseException;
@@ -20,38 +21,44 @@ public class PatientService {
         this.patientRepository = patientRepository;
     }
 
-    public PatientDto save(PatientDto patient) {
-        Patient patient1 = new Patient();
-        patient1.setPatientId(patient.getPatientId());
-        patient1.setName(patient.getName());
-        patient1.setEmail(patient.getEmail());
-        patient1.setPhone(patient.getPhone());
-        patientRepository.save(patient1);
-        return new PatientDto(patient1);
+    public String   validateEmail(String email){
+        if(patientRepository.existsByEmail(email)){
+            throw new IllegalArgumentException("This email already registed!");
+        }
+        return email;
     }
 
-    public List<PatientDto> findAll() {
+    public PatientResponseDTO save(PatientRequestDTO patientRequestDTO) {
+        Patient patient = new Patient();
+        patient.setName(patientRequestDTO.getName());
+        patient.setEmail(validateEmail(patientRequestDTO.getEmail()));
+        patient.setPhone(patientRequestDTO.getPhone());
+        patientRepository.save(patient);
+        return new PatientResponseDTO(patient);
+    }
+
+    public List<PatientResponseDTO> findAll() {
         List<Patient> patientList = patientRepository.findAll();
-        return patientList.stream().map(PatientDto::new).collect(Collectors.toList());
+        return patientList.stream().map(PatientResponseDTO::new).collect(Collectors.toList());
     }
 
-    public PatientDto findById(Long id) {
+    public PatientResponseDTO findById(Long id) {
         Optional<Patient> patient = patientRepository.findById(id);
-        return new PatientDto(patient.orElseThrow(() -> new ResourceNotFoundException(id)));
+        return new PatientResponseDTO(patient.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
-    public PatientDto update(Long id, PatientDto patient) {
+    public PatientResponseDTO update(Long id, PatientRequestDTO patient) {
         try{
             Patient patient1 = patientRepository.getReferenceById(id);
             updateData(patient1, patient);
             patientRepository.save(patient1);
-            return new PatientDto(patient1);
+            return new PatientResponseDTO(patient1);
         }catch (EntityNotFoundException e){
             throw new ResourceNotFoundException(id);
         }
     }
 
-    private void updateData(Patient patient1, PatientDto patient) {
+    private void updateData(Patient patient1, PatientRequestDTO patient) {
         patient1.setName(patient.getName());
         patient1.setPhone(patient.getPhone());
         patient1.setEmail(patient.getEmail());

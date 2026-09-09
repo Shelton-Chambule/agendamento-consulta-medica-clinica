@@ -1,6 +1,5 @@
 package com.clinica.agendamento_consulta_medica.dto.prescriptionItem;
 import com.clinica.agendamento_consulta_medica.entities.PrescriptionItem;
-
 public class PrescriptionItemDto {
 
     private String medicationName;

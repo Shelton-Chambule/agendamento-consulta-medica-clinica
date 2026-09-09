@@ -1,5 +1,5 @@
 package com.clinica.agendamento_consulta_medica.resource;
-import com.clinica.agendamento_consulta_medica.dto.medication.MedicationDto;
+import com.clinica.agendamento_consulta_medica.dto.medication.MedicationRequestDTO;
 import com.clinica.agendamento_consulta_medica.service.MedicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,21 +19,21 @@ public class MedicationResource {
     }
 
     @PostMapping
-    public ResponseEntity<MedicationDto> save(@RequestBody MedicationDto medicationDto){
-        MedicationDto medications = medicationService.save(medicationDto);
+    public ResponseEntity<MedicationRequestDTO> save(@RequestBody MedicationRequestDTO medicationDto){
+        MedicationRequestDTO medications = medicationService.save(medicationDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(medicationDto.getId()).toUri();
         return ResponseEntity.created(uri).body(medications);
     }
 
     @GetMapping
-    public ResponseEntity<List<MedicationDto>> findAll(){
-        List<MedicationDto>medicationDto = medicationService.findAll();
+    public ResponseEntity<List<MedicationRequestDTO>> findAll(){
+        List<MedicationRequestDTO>medicationDto = medicationService.findAll();
         return ResponseEntity.ok().body(medicationDto);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<MedicationDto> findById(@PathVariable Long id){
-        MedicationDto medicationDto = medicationService.findById(id);
+    public ResponseEntity<MedicationRequestDTO> findById(@PathVariable Long id){
+        MedicationRequestDTO medicationDto = medicationService.findById(id);
         return ResponseEntity.ok().body(medicationDto);
     }
 
@@ -44,8 +44,8 @@ public class MedicationResource {
     }
 
     @PutMapping(value = "/{id}")
-    public  ResponseEntity<MedicationDto> update(@RequestBody MedicationDto medication,@PathVariable Long id ){
-        MedicationDto medication1 = medicationService.update(medication,id);
+    public  ResponseEntity<MedicationRequestDTO> update(@RequestBody MedicationRequestDTO medication, @PathVariable Long id ){
+        MedicationRequestDTO medication1 = medicationService.update(medication,id);
         return ResponseEntity.ok().body(medication1);
     }
 }
