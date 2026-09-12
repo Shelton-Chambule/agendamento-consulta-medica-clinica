@@ -3,19 +3,19 @@ import com.clinica.agendamento_consulta_medica.entities.HistoryPatient;
 import com.clinica.agendamento_consulta_medica.entities.enums.StatusConsultation;
 import java.time.LocalDate;
 import java.time.LocalTime;
-public class HistoryPatientDto {
+public class HistoryPatientResponseDTO {
 
-    private Long id;
-    private Long idPatient;
+    private Long historyId;
+    private Long patientId;
     private String namePatient;
     private LocalTime statTime;
     private LocalDate date;
     private Integer duration;
     private StatusConsultation statusConsultation;
 
-    public HistoryPatientDto(HistoryPatient historyPatient) {
-        id = historyPatient.getId();
-        idPatient =  historyPatient.getConsultations().getPatient().getPatientId();
+    public HistoryPatientResponseDTO(HistoryPatient historyPatient) {
+        historyId = historyPatient.getId();
+        patientId =  historyPatient.getConsultations().getPatient().getPatientId();
         namePatient = historyPatient.getConsultations().getPatient().getName();
         statTime = historyPatient.getConsultations().getStarTime();
         duration = historyPatient.getConsultations().getDuration();
@@ -23,20 +23,20 @@ public class HistoryPatientDto {
         statusConsultation  = historyPatient.getStatusConsultation();
     }
 
-    public Long getId() {
-        return id;
+    public Long getHistoryId() {
+        return historyId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setHistoryId(Long id) {
+        this.historyId = id;
     }
 
-    public Long getIdPatient() {
-        return idPatient;
+    public Long getIPatientId() {
+        return patientId;
     }
 
-    public void setIdPatient(Long idPatient) {
-        this.idPatient = idPatient;
+    public void setPatientId(Long idPatient) {
+        this.patientId = idPatient;
     }
 
     public String getNamePatient() {

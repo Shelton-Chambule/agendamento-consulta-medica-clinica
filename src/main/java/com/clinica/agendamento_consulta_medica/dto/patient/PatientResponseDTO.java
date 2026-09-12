@@ -1,11 +1,8 @@
 package com.clinica.agendamento_consulta_medica.dto.patient;
 import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationRequestDTO;
-import com.clinica.agendamento_consulta_medica.entities.Consultation;
 import com.clinica.agendamento_consulta_medica.entities.Patient;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 public class PatientResponseDTO {
 
     private Long patientId;

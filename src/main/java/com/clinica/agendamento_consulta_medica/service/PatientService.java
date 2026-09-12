@@ -5,6 +5,7 @@ import com.clinica.agendamento_consulta_medica.entities.Patient;
 import com.clinica.agendamento_consulta_medica.repository.PatientRepository;
 import com.clinica.agendamento_consulta_medica.service.exception.DataBaseException;
 import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
+import com.clinica.agendamento_consulta_medica.service.exception.UniqueEmailException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class PatientService {
 
     public String   validateEmail(String email){
         if(patientRepository.existsByEmail(email)){
-            throw new IllegalArgumentException("This email already registed!");
+            throw new UniqueEmailException("This email already register!");
         }
         return email;
     }

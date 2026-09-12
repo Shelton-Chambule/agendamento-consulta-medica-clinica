@@ -1,4 +1,4 @@
-package com.clinica.agendamento_consulta_medica.resource;
+package com.clinica.agendamento_consulta_medica.controller;
 import com.clinica.agendamento_consulta_medica.dto.patient.PatientRequestDTO;
 import com.clinica.agendamento_consulta_medica.dto.patient.PatientResponseDTO;
 import com.clinica.agendamento_consulta_medica.service.PatientService;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/v1/patient")
+@RequestMapping("/patient")
 public class PatientResource {
 
     private  final  PatientService patientService;
@@ -18,34 +18,33 @@ public class PatientResource {
         this.patientService = patientService;
     }
 
-    @PostMapping("/save")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/save/patient")
     public ResponseEntity<PatientResponseDTO> save( @Valid  @RequestBody PatientRequestDTO patientRequestDTO) {
         PatientResponseDTO patient = patientService.save(patientRequestDTO);
-        return ResponseEntity.ok().body(patient);
+        return ResponseEntity.status(HttpStatus.CREATED).body(patient);
     }
 
-    @GetMapping("/findAll")
+    @GetMapping("/findAllPatient")
     public ResponseEntity<List<PatientResponseDTO>> findAll() {
         List<PatientResponseDTO> patient = patientService.findAll();
         return ResponseEntity.ok().body(patient);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<PatientResponseDTO> findById(@PathVariable Long id) {
         PatientResponseDTO patient = patientService.findById(id);
         return ResponseEntity.ok().body(patient);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         patientService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PatientRequestDTO> update(@PathVariable Long id, @RequestBody PatientRequestDTO patient) {
-        PatientRequestDTO patient1 = patientService.update(id, patient);
+    public ResponseEntity<PatientResponseDTO> update(@PathVariable Long id,  @Valid @RequestBody PatientRequestDTO patient) {
+        PatientResponseDTO patient1 = patientService.update(id, patient);
         return ResponseEntity.ok().body(patient1);
     }
 }

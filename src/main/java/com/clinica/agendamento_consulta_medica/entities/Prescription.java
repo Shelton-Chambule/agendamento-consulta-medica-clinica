@@ -12,27 +12,23 @@ public class Prescription implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate date;
-    private LocalDate validity;
     private String observations;
+    private String dosagem;
+    private String frequency;
+    private Set<String> medications;
 
-    @OneToOne
-    @JoinColumn(name = "id_consultation")
-    private Consultation consultation;
-
-    @OneToMany(mappedBy = "prescription")
-    private Set<Medications> medications = new HashSet<>();
-
-    @OneToMany(mappedBy = "id.prescription")
-    private List<PrescriptionItem> prescriptionItem = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "consultation_id")
+    private Consultation consultation ;
 
     public Prescription(){}
 
-    public Prescription(Long id, LocalDate date, LocalDate validity, String observations, Consultation consultation) {
+    public Prescription(Long id, LocalDate date, String observations, String dosagem, String frequency) {
         this.id = id;
         this.date = date;
-        this.validity = validity;
         this.observations = observations;
-        this.consultation = consultation;
+        this.dosagem = dosagem;
+        this.frequency = frequency;
     }
 
     @Override
@@ -42,8 +38,36 @@ public class Prescription implements Serializable {
         return Objects.equals(id, receita.id);
     }
 
-    public List<PrescriptionItem> getPrescriptionItem() {
-        return prescriptionItem;
+    public Consultation getConsultation() {
+        return consultation;
+    }
+
+    public void setConsultation(Consultation consultation) {
+        this.consultation = consultation;
+    }
+
+    public Set<String> getMedications() {
+        return medications;
+    }
+
+    public void setMedications(Set<String> medications) {
+        this.medications = medications;
+    }
+
+    public String getDosagem() {
+        return dosagem;
+    }
+
+    public void setDosagem(String dosagem) {
+        this.dosagem = dosagem;
+    }
+
+    public String getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(String frequency) {
+        this.frequency = frequency;
     }
 
     @Override
@@ -59,16 +83,8 @@ public class Prescription implements Serializable {
         this.date = date;
     }
 
-    public void setValidity(LocalDate validity) {
-        this.validity = validity;
-    }
-
     public void setObservations(String observations) {
         this.observations = observations;
-    }
-
-    public void setConsultation(Consultation consultation) {
-        this.consultation = consultation;
     }
 
     public Long getId() {
@@ -79,19 +95,13 @@ public class Prescription implements Serializable {
         return date;
     }
 
-    public LocalDate getValidity() {
-        return validity;
-    }
-
     public String getObservations() {
         return observations;
     }
 
-    public Consultation getConsultation() {
-        return consultation;
+    @PrePersist
+    public  void date(){
+        this.date = LocalDate.now();
     }
 
-    public Set<Medications> getMedications() {
-        return medications;
-    }
 }

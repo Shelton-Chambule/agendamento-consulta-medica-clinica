@@ -14,9 +14,7 @@ public class Doctor {
     private String phone;
     private String password;
 
-
-    @ManyToMany
-    @JoinTable(name = "tb_especialty_doctor", joinColumns = @JoinColumn(name = "id_doctor"), inverseJoinColumns = @JoinColumn(name = "id_specialty"))
+    @OneToMany(mappedBy = "doctors")
     private List<Specialty> specialties = new ArrayList<>();
 
 

@@ -1,7 +1,5 @@
-package com.clinica.agendamento_consulta_medica.resource.exception;
+package com.clinica.agendamento_consulta_medica.controller.exception;
 import java.time.Instant;
-
-
 public class StandardError {
 
     private Instant timeStamp;

@@ -1,4 +1,4 @@
-package com.clinica.agendamento_consulta_medica.resource;
+package com.clinica.agendamento_consulta_medica.controller;
 import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationRequestDTO;
 import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationResponseDTO;
 import com.clinica.agendamento_consulta_medica.service.ConsultationService;
@@ -18,11 +18,10 @@ public class ConsultationResource {
         this.consultationService = consultationService;
     }
 
-    @PostMapping("/save")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/save/consultation")
     public ResponseEntity<ConsultationResponseDTO>  save( @Valid  @RequestBody ConsultationRequestDTO consultation){
         ConsultationResponseDTO consultations = consultationService.save(consultation);
-        return ResponseEntity.ok().body(consultations);
+        return ResponseEntity.status(HttpStatus.CREATED).body(consultations);
     }
 
     @GetMapping("/findAll")

@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_consultation")
@@ -19,8 +21,8 @@ public class Consultation implements Serializable {
     private LocalTime starTime;
     private Integer duration;
 
-    @OneToOne(mappedBy = "consultation")
-    private Prescription revenue;
+    @OneToMany(mappedBy = "consultation")
+    private Set<Prescription> revenue;
 
     @ManyToOne
     @JoinColumn(name = "id_doctor")
@@ -99,10 +101,6 @@ public class Consultation implements Serializable {
         this.duration = duration;
     }
 
-    public void setRevenue(Prescription revenue) {
-        this.revenue = revenue;
-    }
-
     public Long getId() {
         return id;
     }
@@ -123,15 +121,19 @@ public class Consultation implements Serializable {
         return duration;
     }
 
-    public Prescription getRevenue() {
-        return revenue;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Consultation that = (Consultation) o;
         return Objects.equals(id, that.id);
+    }
+
+    public Set<Prescription> getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(Set<Prescription> revenue) {
+        this.revenue = revenue;
     }
 
     @Override
@@ -143,5 +145,10 @@ public class Consultation implements Serializable {
     public void moment() {
         this.moment = LocalDateTime.now();
     }
+
+//    @PrePersist
+//    public void date() {
+//        this.date = LocalDate.now();
+//    }
 
 }

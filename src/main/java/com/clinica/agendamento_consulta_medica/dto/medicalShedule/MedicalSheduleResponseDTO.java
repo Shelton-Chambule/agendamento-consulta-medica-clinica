@@ -1,6 +1,11 @@
 package com.clinica.agendamento_consulta_medica.dto.medicalShedule;
 import com.clinica.agendamento_consulta_medica.entities.MedicalSchedule;
+import com.clinica.agendamento_consulta_medica.entities.enums.DaysWeeks;
+
 import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class MedicalSheduleResponseDTO {
 
     private Long id;
@@ -8,7 +13,7 @@ public class MedicalSheduleResponseDTO {
     private LocalTime endTime;
     private LocalTime breakTimes;
     private Long doctorId;
-    private String doctorName;
+    private List<String> daysOfWeek;
 
     public MedicalSheduleResponseDTO(){}
 
@@ -18,7 +23,17 @@ public class MedicalSheduleResponseDTO {
         this.endTime = medicalSchedule.getEndTime();
         this.breakTimes =  medicalSchedule.getBreakTimes();
         this.doctorId = medicalSchedule.getDoctor().getDoctorId();
-        this.doctorName = medicalSchedule.getDoctor().getName();
+        this.daysOfWeek  = medicalSchedule.getDaysOfWeek().stream()
+                .map(DaysWeeks::name)
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getDaysOfWeek() {
+        return daysOfWeek;
+    }
+
+    public void setDaysOfWeek(List<String> daysOfWeek) {
+        this.daysOfWeek = daysOfWeek;
     }
 
     public Long getId() {
@@ -59,13 +74,5 @@ public class MedicalSheduleResponseDTO {
 
     public void setDoctorId(Long doctorId) {
         this.doctorId = doctorId;
-    }
-
-    public String getDoctorName() {
-        return doctorName;
-    }
-
-    public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
     }
 }

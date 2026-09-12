@@ -1,19 +1,35 @@
 package com.clinica.agendamento_consulta_medica.dto.consultation;
 import com.clinica.agendamento_consulta_medica.entities.Consultation;
 import com.clinica.agendamento_consulta_medica.entities.enums.StatusConsultation;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
 public class ConsultationRequestDTO {
 
     private LocalDateTime moment;
+
+    @JsonFormat(pattern ="yyyy-MM-dd")
+    @NotNull(message = "date not can be null")
     private LocalDate date;
+
+    @JsonFormat(pattern = "HH:mm:ss")
+    @NotNull(message = "the starTime not can be null")
     private LocalTime starTime;
+
+    @NotNull(message = "the duration not can be null")
     private Integer duration;
+
+    @NotNull(message = "the id patient not can be null")
     private Long patient;
+
+    @NotNull(message = "the id doctor not can be null")
     private Long doctor;
+
     private StatusConsultation statusConsultation;
+
+    public ConsultationRequestDTO(){}
 
     public ConsultationRequestDTO(Consultation consultation) {
         moment = consultation.getMoment();
@@ -24,7 +40,6 @@ public class ConsultationRequestDTO {
         statusConsultation = consultation.getStatusConsultation();
         doctor = consultation.getDoctor().getDoctorId();
     }
-
 
     public LocalDateTime getMoment() {
         return moment;

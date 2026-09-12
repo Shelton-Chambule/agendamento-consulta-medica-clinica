@@ -1,32 +1,38 @@
 package com.clinica.agendamento_consulta_medica.dto.medicalShedule;
 import com.clinica.agendamento_consulta_medica.entities.MedicalSchedule;
+import com.clinica.agendamento_consulta_medica.entities.enums.DaysWeeks;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalTime;
-public class MedicalScheduleDto {
+import java.util.List;
+public class MedicalScheduleRequestDTO {
 
-    private Long id;
+    @JsonFormat(pattern = "H:mm:ss")
     private LocalTime starTime;
+    @JsonFormat(pattern = "H:mm:ss")
     private LocalTime endTime;
+    @JsonFormat(pattern = "H:mm:ss")
     private LocalTime breakTimes;
+
+    private List<String> daysOfWeek;
+
     private Long doctorId;
-    private String doctorName;
 
+    public MedicalScheduleRequestDTO(){}
 
-    public MedicalScheduleDto(MedicalSchedule medicalSchedule) {
-        id = medicalSchedule.getId();
+    public MedicalScheduleRequestDTO(MedicalSchedule medicalSchedule) {
         starTime = medicalSchedule.getStarTime();
         endTime = medicalSchedule.getEndTime();
         doctorId = medicalSchedule.getDoctor().getDoctorId();
-        doctorName = medicalSchedule.getDoctor().getName();
         breakTimes = medicalSchedule.getBreakTimes();
+        daysOfWeek = medicalSchedule.getDaysOfWeek().stream().map(DaysWeeks::name).toList();
     }
 
-
-    public Long getId() {
-        return id;
+    public List<String> getDaysOfWeek() {
+        return daysOfWeek;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setDaysOfWeek(List<String> daysOfWeek) {
+        this.daysOfWeek = daysOfWeek;
     }
 
     public LocalTime getStarTime() {
@@ -61,11 +67,4 @@ public class MedicalScheduleDto {
         this.doctorId = doctorId;
     }
 
-    public String getDoctorName() {
-        return doctorName;
-    }
-
-    public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
-    }
 }

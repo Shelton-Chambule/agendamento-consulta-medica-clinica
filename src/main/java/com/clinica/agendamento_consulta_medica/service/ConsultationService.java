@@ -12,6 +12,7 @@ import com.clinica.agendamento_consulta_medica.service.exception.DataBaseExcepti
 import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
 import com.clinica.agendamento_consulta_medica.service.exception.ScheduleConflictException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
@@ -28,11 +29,13 @@ public class ConsultationService {
     private  final ConsulationRepository consulationRepository;
     private final DoctorRepository doctorRepository;
     private final  PatientRepository patientRepository;
+    private  final  HistoryPatientService historyPatientService;
 
-    public ConsultationService(ConsulationRepository consulationRepository, DoctorRepository doctorRepository, PatientRepository patientRepository) {
+    public ConsultationService(ConsulationRepository consulationRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, HistoryPatientService historyPatientService) {
         this.consulationRepository = consulationRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
+        this.historyPatientService = historyPatientService;
     }
 
     public Boolean hasScheduleConflict(Doctor doctor, LocalTime startTime, LocalTime duration) {
@@ -49,10 +52,11 @@ public class ConsultationService {
         return false;
     }
 
+    @Transactional
     public ConsultationResponseDTO save(ConsultationRequestDTO consultationDto) {
 
-        Doctor doctor = doctorRepository.getReferenceById(consultationDto.getDoctor());
-        Patient patient = patientRepository.getReferenceById(consultationDto.getPatient());
+        Doctor doctor = doctorRepository.findById(consultationDto.getDoctor()).orElseThrow(() -> new ResourceNotFoundException(consultationDto.getDoctor()));
+        Patient patient = patientRepository.findById(consultationDto.getPatient()).orElseThrow(() -> new ResourceNotFoundException(consultationDto.getPatient()));
 
         LocalTime starTime = consultationDto.getStarTime();
         LocalTime endTime = starTime.plusMinutes(consultationDto.getDuration());
@@ -62,6 +66,7 @@ public class ConsultationService {
         }
 
         Consultation consultation = new Consultation();
+
         consultation.setMoment(LocalDateTime.now());
         consultation.setDate(LocalDate.now());
         consultation.setDuration(consultationDto.getDuration());
@@ -70,6 +75,9 @@ public class ConsultationService {
         consultation.setPatient(patient);
         consultation.setStatusConsultation(StatusConsultation.WAITING);
         consulationRepository.save(consultation);
+
+        historyPatientService.save(consultation);
+
         return new ConsultationResponseDTO(consultation);
     }
 
@@ -97,19 +105,22 @@ public class ConsultationService {
         }
     }
 
-    public ConsultationResponseDTO update(Long id, ConsultationRequestDTO consultation) {
+    public ConsultationResponseDTO update(Long id, ConsultationRequestDTO consultationRequestDTO) {
         try {
-            Consultation consultation1 = consulationRepository.getReferenceById(id);
-            updateData(consultation1, consultation);
-            consulationRepository.save(consultation1);
-            return new ConsultationResponseDTO(consultation1);
+            Consultation consultation = consulationRepository.getReferenceById(id);
+            updateData(consultation, consultationRequestDTO);
+            consulationRepository.save(consultation);
+            return new ConsultationResponseDTO(consultation);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
     }
 
-    private void updateData(Consultation consultation1, ConsultationRequestDTO consultation) {
-        consultation1.setStarTime(consultation.getStarTime());
-        consultation1.setDate(consultation.getDate());
+    private void updateData(Consultation consultation, ConsultationRequestDTO consultationRequestDTO) {
+        Doctor doctor = doctorRepository.findById(consultationRequestDTO.getDoctor()).orElseThrow(() -> new ResourceNotFoundException(consultationRequestDTO.getDoctor()));
+
+        consultation.setStarTime(consultationRequestDTO.getStarTime());
+        consultation.setDuration(consultationRequestDTO.getDuration());
+        consultation.setDoctor(doctor);
     }
 }

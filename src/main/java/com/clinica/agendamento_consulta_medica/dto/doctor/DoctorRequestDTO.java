@@ -1,35 +1,26 @@
 package com.clinica.agendamento_consulta_medica.dto.doctor;
 import com.clinica.agendamento_consulta_medica.entities.Doctor;
-import com.clinica.agendamento_consulta_medica.entities.MedicalSchedule;
-import com.clinica.agendamento_consulta_medica.entities.Specialty;
-import java.time.DayOfWeek;
-import java.util.List;
-import java.util.Set;
-
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 public class DoctorRequestDTO {
 
-    private Long id;
+    @NotBlank(message = "name not can it is  null")
     private String name;
+
+    @Email
     private String email;
+
+    @NotBlank(message = "cannot null")
+    @Size(min = 9, max = 12)
     private String phone;
-    private List<String> specialtyDto;
-    private List<Set<DayOfWeek>> medicalSchedule;
+
+    public DoctorRequestDTO(){}
 
     public DoctorRequestDTO(Doctor doctor) {
-        id = doctor.getDoctorId();
         name = doctor.getName();
         email = doctor.getEmail();
         phone = doctor.getPhone();
-        specialtyDto = doctor.getSpecialties().stream().map(Specialty::getName).toList();
-        medicalSchedule = doctor.getMedicalSchedules().stream().map(MedicalSchedule::getDayOfWeek).toList();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -54,21 +45,5 @@ public class DoctorRequestDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public List<String> getSpecialtyDto() {
-        return specialtyDto;
-    }
-
-    public void setSpecialtyDto(List<String> specialtyDto) {
-        this.specialtyDto = specialtyDto;
-    }
-
-    public List<Set<DayOfWeek>> getMedicalSchedule() {
-        return medicalSchedule;
-    }
-
-    public void setMedicalSchedule(List<Set<DayOfWeek>> medicalSchedule) {
-        this.medicalSchedule = medicalSchedule;
     }
 }
