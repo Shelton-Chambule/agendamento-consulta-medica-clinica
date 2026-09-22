@@ -1,13 +1,17 @@
 package com.clinica.agendamento_consulta_medica.service;
-import com.clinica.agendamento_consulta_medica.dto.doctor.DoctorRequestDTO;
-import com.clinica.agendamento_consulta_medica.dto.doctor.DoctorResponseDTO;
+import com.clinica.agendamento_consulta_medica.dto.doctor.DoctorRequest;
+import com.clinica.agendamento_consulta_medica.dto.doctor.DoctorResponse;
+import com.clinica.agendamento_consulta_medica.entities.Account;
 import com.clinica.agendamento_consulta_medica.entities.Doctor;
+import com.clinica.agendamento_consulta_medica.entities.enums.AccountRole;
+import com.clinica.agendamento_consulta_medica.repository.AccountRepository;
 import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
 import com.clinica.agendamento_consulta_medica.service.exception.DataBaseException;
 import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
-import com.clinica.agendamento_consulta_medica.service.exception.UniqueEmailException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -17,35 +21,41 @@ import java.util.stream.Collectors;
 public class DoctorService {
 
     private final  DoctorRepository doctorRepository;
+    private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DoctorService(DoctorRepository doctorRepository) {
+    public DoctorService(DoctorRepository doctorRepository, AccountRepository accountRepository, PasswordEncoder passwordEncoder) {
         this.doctorRepository = doctorRepository;
+        this.accountRepository = accountRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public String  validateEmail(String email){
-        if(doctorRepository.existsByEmail(email)){
-            throw new UniqueEmailException("This email already register!");
-        }
-        return email;
-    }
+    @Transactional
+    public DoctorResponse registerDoctor(DoctorRequest doctorRequestDTO) {
 
-    public DoctorResponseDTO save(DoctorRequestDTO doctorRequestDTO) {
         Doctor doctor = new Doctor();
+        Account account = new Account();
+
+        account.setLogin(doctorRequestDTO.getLogin());
+        account.setPassword(passwordEncoder.encode(doctorRequestDTO.getPassword()));
+        account.setAccountRole(AccountRole.DOCTOR);
+        accountRepository.save(account);
+
         doctor.setName(doctorRequestDTO.getName());
         doctor.setPhone(doctorRequestDTO.getPhone());
-        doctor.setEmail(validateEmail(doctorRequestDTO.getEmail()));
+        doctor.setAccount(account);
         doctorRepository.save(doctor);
-        return new DoctorResponseDTO(doctor);
+        return new DoctorResponse(doctor);
     }
 
-    public List<DoctorResponseDTO> findAll() {
+    public List<DoctorResponse> findAll() {
         List<Doctor> doctors = doctorRepository.findAll();
-        return doctors.stream().map(DoctorResponseDTO::new).collect(Collectors.toList());
+        return doctors.stream().map(DoctorResponse::new).collect(Collectors.toList());
     }
 
-    public DoctorResponseDTO findById(Long id) {
+    public DoctorResponse findById(Long id) {
         Optional<Doctor> doctor = doctorRepository.findById(id);
-        return new DoctorResponseDTO(doctor.orElseThrow(() -> new ResourceNotFoundException(id)));
+        return new DoctorResponse(doctor.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
 
@@ -60,20 +70,25 @@ public class DoctorService {
         }
     }
 
-    public DoctorResponseDTO update(Long id, DoctorRequestDTO doctor) {
+    public DoctorResponse update(Long id, DoctorRequest doctor) {
         try {
             Doctor doctor1 = doctorRepository.getReferenceById(id);
             updateDate(doctor1, doctor);
             doctorRepository.save(doctor1);
-            return new DoctorResponseDTO(doctor1);
+            return new DoctorResponse(doctor1);
         }catch (EntityNotFoundException e){
             throw new ResourceNotFoundException(id);
         }
     }
 
-    private void updateDate(Doctor doctor1, DoctorRequestDTO doctor) {
+    private void updateDate(Doctor doctor1, DoctorRequest doctor) {
+
+        Account account = new Account();
+
         doctor1.setName(doctor.getName());
-        doctor1.setEmail(doctor.getEmail());
         doctor1.setPhone(doctor.getPhone());
+        account.setLogin(doctor.getLogin());
+        account.setPassword(passwordEncoder.encode(doctor.getPassword()));
+        accountRepository.save(account);
     }
 }

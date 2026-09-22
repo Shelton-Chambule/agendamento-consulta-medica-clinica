@@ -1,5 +1,5 @@
 package com.clinica.agendamento_consulta_medica.controller;
-import com.clinica.agendamento_consulta_medica.dto.history.HistoryPatientResponseDTO;
+import com.clinica.agendamento_consulta_medica.dto.history.HistoryPatientResponse;
 import com.clinica.agendamento_consulta_medica.entities.Consultation;
 import com.clinica.agendamento_consulta_medica.service.HistoryPatientService;
 import jakarta.validation.Valid;
@@ -10,28 +10,28 @@ import java.util.List;
 
 @RestController
 @RequestMapping( "/historyConsultation")
-public class HistoryPatientResource {
+public class HistoryPatientController {
 
     private final HistoryPatientService historyPatientService;
 
-    public HistoryPatientResource(HistoryPatientService historyPatientService) {
+    public HistoryPatientController(HistoryPatientService historyPatientService) {
         this.historyPatientService = historyPatientService;
     }
 
     @PostMapping("/save/history")
-    public ResponseEntity<HistoryPatientResponseDTO> save(@Valid @RequestBody Consultation consultation){
-        HistoryPatientResponseDTO historyPatientDto1 = historyPatientService.save(consultation);
+    public ResponseEntity<HistoryPatientResponse> save(@Valid @RequestBody Consultation consultation){
+        HistoryPatientResponse historyPatientDto1 = historyPatientService.save(consultation);
         return ResponseEntity.status(HttpStatus.CREATED).body(historyPatientDto1);
     }
     @GetMapping("/findAll")
-    public ResponseEntity<List<HistoryPatientResponseDTO>> findAll() {
-        List<HistoryPatientResponseDTO> historyPatient = historyPatientService.findAll();
+    public ResponseEntity<List<HistoryPatientResponse>> findAll() {
+        List<HistoryPatientResponse> historyPatient = historyPatientService.findAll();
         return ResponseEntity.ok().body(historyPatient);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HistoryPatientResponseDTO> findById(@PathVariable Long id) {
-        HistoryPatientResponseDTO historyPatient = historyPatientService.findById(id);
+    public ResponseEntity<HistoryPatientResponse> findById(@PathVariable Long id) {
+        HistoryPatientResponse historyPatient = historyPatientService.findById(id);
         return ResponseEntity.ok().body(historyPatient);
     }
 

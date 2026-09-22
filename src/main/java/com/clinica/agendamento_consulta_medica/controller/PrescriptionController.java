@@ -1,6 +1,6 @@
 package com.clinica.agendamento_consulta_medica.controller;
-import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionRequestDTO;
-import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionResponseDTO;
+import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionRequest;
+import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionResponse;
 import com.clinica.agendamento_consulta_medica.service.PrescriptionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -10,29 +10,29 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/prescription" )
-public class PrescriptionResource {
+public class PrescriptionController {
 
     private final PrescriptionService prescriptionService;
 
-    public PrescriptionResource(PrescriptionService prescriptionService) {
+    public PrescriptionController(PrescriptionService prescriptionService) {
         this.prescriptionService = prescriptionService;
     }
 
     @PostMapping("/save/prescription")
-    public ResponseEntity<PrescriptionResponseDTO> save(@Valid  @RequestBody PrescriptionRequestDTO prescriptionRequestDTO){
-        PrescriptionResponseDTO prescriptions = prescriptionService.save(prescriptionRequestDTO);
+    public ResponseEntity<PrescriptionResponse> save(@Valid  @RequestBody PrescriptionRequest prescriptionRequestDTO){
+        PrescriptionResponse prescriptions = prescriptionService.save(prescriptionRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(prescriptions);
     }
 
     @GetMapping("/findAll/prescription")
-    public ResponseEntity<List<PrescriptionResponseDTO>> findAll(){
-        List<PrescriptionResponseDTO> prescriptionDto = prescriptionService.findAll();
+    public ResponseEntity<List<PrescriptionResponse>> findAll(){
+        List<PrescriptionResponse> prescriptionDto = prescriptionService.findAll();
         return ResponseEntity.ok().body(prescriptionDto);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PrescriptionResponseDTO> findById(@PathVariable Long id){
-        PrescriptionResponseDTO prescriptionDto = prescriptionService.findById(id);
+    public ResponseEntity<PrescriptionResponse> findById(@PathVariable Long id){
+        PrescriptionResponse prescriptionDto = prescriptionService.findById(id);
         return ResponseEntity.ok().body(prescriptionDto);
     }
 
@@ -43,8 +43,8 @@ public class PrescriptionResource {
     }
 
     @PatchMapping("/{id}")
-    public  ResponseEntity<PrescriptionResponseDTO> update(@Valid @RequestBody PrescriptionResponseDTO prescriptionDto, @PathVariable Long id ){
-        PrescriptionResponseDTO prescriptionDto1 = prescriptionService.update(prescriptionDto,id);
+    public  ResponseEntity<PrescriptionResponse> update( @PathVariable Long id, @Valid @RequestBody PrescriptionRequest prescriptionDto ){
+        PrescriptionResponse prescriptionDto1 = prescriptionService.update(id,prescriptionDto);
         return ResponseEntity.ok().body(prescriptionDto1);
     }
 }

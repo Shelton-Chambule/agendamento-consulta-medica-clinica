@@ -1,15 +1,15 @@
 package com.clinica.agendamento_consulta_medica.service;
-import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionRequestDTO;
-import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionResponseDTO;
+import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionRequest;
+import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionResponse;
 import com.clinica.agendamento_consulta_medica.entities.Consultation;
 import com.clinica.agendamento_consulta_medica.entities.Prescription;
 import com.clinica.agendamento_consulta_medica.entities.enums.StatusConsultation;
 import com.clinica.agendamento_consulta_medica.repository.ConsulationRepository;
-import com.clinica.agendamento_consulta_medica.repository.PrescriptionRepsitory;
+import com.clinica.agendamento_consulta_medica.repository.PrescriptionRepository;
+import com.clinica.agendamento_consulta_medica.repository.PrescriptionRepository;
 import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
 import com.clinica.agendamento_consulta_medica.service.exception.ValidateStatusConsultation;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.Id;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
 @Service
 public class PrescriptionService {
 
-    private final PrescriptionRepsitory prescriptionRepsitory;
+    private final PrescriptionRepository prescriptionRepository;
     private final ConsulationRepository consulationRepository;
 
-    public PrescriptionService(PrescriptionRepsitory prescriptionRepsitory, ConsulationRepository consulationRepository) {
-        this.prescriptionRepsitory = prescriptionRepsitory;
+    public PrescriptionService(PrescriptionRepository prescriptionRepsitory, ConsulationRepository consulationRepository) {
+        this.prescriptionRepository = prescriptionRepsitory;
         this.consulationRepository = consulationRepository;
 
     }
@@ -35,13 +35,13 @@ public class PrescriptionService {
             throw new ResourceNotFoundException(IdConsultation);
         }
 
-        if (!(IdConsultation.equals(consultation.getId())) && consultation.getStatusConsultation().equals(StatusConsultation.CARRIED_OUT)) {
+        if (!(IdConsultation.equals(consultation.getId())) && consultation.getStatusConsultation().equals(StatusConsultation.CARRIED_OUT))
             throw new ValidateStatusConsultation("Erro creating of prescription, verify id  of consultation");
-        }
+
         return IdConsultation;
     }
 
-    public PrescriptionResponseDTO save(PrescriptionRequestDTO prescriptionRequestDTO) {
+    public PrescriptionResponse save(PrescriptionRequest prescriptionRequestDTO) {
 
         Consultation consultationId = consulationRepository.findById(prescriptionRequestDTO.getConsultationId()).orElseThrow(() ->
                 new ResourceNotFoundException(prescriptionRequestDTO.getConsultationId()));
@@ -54,39 +54,39 @@ public class PrescriptionService {
         prescription.setDate(LocalDate.now());
         prescription.setConsultation(consultationId);
         prescription.setObservations(prescriptionRequestDTO.getObservations());
-        prescriptionRepsitory.save(prescription);
-        return new PrescriptionResponseDTO(prescription);
+        prescriptionRepository.save(prescription);
+        return new PrescriptionResponse(prescription);
     }
 
-    public List<PrescriptionResponseDTO> findAll() {
-        List<Prescription> prescriptions = prescriptionRepsitory.findAll();
-        return prescriptions.stream().map(PrescriptionResponseDTO::new).collect(Collectors.toList());
+    public List<PrescriptionResponse> findAll() {
+        List<Prescription> prescriptions = prescriptionRepository.findAll();
+        return prescriptions.stream().map(PrescriptionResponse::new).collect(Collectors.toList());
     }
 
-    public PrescriptionResponseDTO findById(Long id) {
-        Optional<Prescription> prescription = prescriptionRepsitory.findById(id);
-        return new PrescriptionResponseDTO(prescription.orElseThrow(() -> new ResourceNotFoundException(id)));
+    public PrescriptionResponse findById(Long id) {
+        Optional<Prescription> prescription = prescriptionRepository.findById(id);
+        return new PrescriptionResponse(prescription.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
     public void deleteById(Long id) {
-        if (!prescriptionRepsitory.existsById(id)) {
+        if (!prescriptionRepository.existsById(id)) {
             throw new ResourceNotFoundException(id);
         }
-        prescriptionRepsitory.deleteById(id);
+        prescriptionRepository.deleteById(id);
     }
 
-    public PrescriptionResponseDTO update(PrescriptionResponseDTO prescriptionDto, Long id) {
+    public PrescriptionResponse update (Long id, PrescriptionRequest prescriptionDto) {
         try {
-            Prescription prescription = prescriptionRepsitory.getReferenceById(id);
+            Prescription prescription = prescriptionRepository.getReferenceById(id);
             updateData(prescription, prescriptionDto);
-            prescriptionRepsitory.save(prescription);
-            return new PrescriptionResponseDTO(prescription);
+            prescriptionRepository.save(prescription);
+            return new PrescriptionResponse(prescription);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
     }
 
-    private void updateData(Prescription prescription, PrescriptionResponseDTO prescriptionDto) {
+    private void updateData(Prescription prescription, PrescriptionRequest prescriptionDto) {
         prescription.setObservations(prescriptionDto.getObservations());
         prescription.setDate(prescriptionDto.getDate());
     }

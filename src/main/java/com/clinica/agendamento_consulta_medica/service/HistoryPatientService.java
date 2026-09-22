@@ -1,10 +1,11 @@
 package com.clinica.agendamento_consulta_medica.service;
-import com.clinica.agendamento_consulta_medica.dto.history.HistoryPatientResponseDTO;
+import com.clinica.agendamento_consulta_medica.dto.history.HistoryPatientResponse;
 import com.clinica.agendamento_consulta_medica.entities.Consultation;
 import com.clinica.agendamento_consulta_medica.entities.HistoryPatient;
 import com.clinica.agendamento_consulta_medica.repository.HistoryPatientRepository;
 import com.clinica.agendamento_consulta_medica.service.exception.DataBaseException;
 import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -20,22 +21,23 @@ public class HistoryPatientService {
         this.historyPatientRepository = historyPatientRepository;
     }
 
-    public HistoryPatientResponseDTO save(Consultation consultation) {
+    public HistoryPatientResponse save(Consultation consultation) {
         HistoryPatient historyPatient = new HistoryPatient();
-        historyPatient.setConsultations(consultation);
+
+        historyPatient.setConsultation(consultation);
         historyPatient.setStatusConsultation(consultation.getStatusConsultation());
         historyPatientRepository.save(historyPatient);
-        return new HistoryPatientResponseDTO(historyPatient);
+        return new HistoryPatientResponse(historyPatient);
     }
 
-    public List<HistoryPatientResponseDTO> findAll() {
+    public List<HistoryPatientResponse> findAll() {
         List<HistoryPatient> historyPatient = historyPatientRepository.findAll();
-        return historyPatient.stream().map(HistoryPatientResponseDTO::new).collect(Collectors.toList());
+        return historyPatient.stream().map(HistoryPatientResponse::new).collect(Collectors.toList());
     }
 
-    public HistoryPatientResponseDTO findById(Long id) {
+    public HistoryPatientResponse findById(Long id) {
         Optional<HistoryPatient> historyPatient = historyPatientRepository.findById(id);
-        return new HistoryPatientResponseDTO(historyPatient.orElseThrow(() -> new ResourceNotFoundException(id)));
+        return new HistoryPatientResponse(historyPatient.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
     public void deleteById(Long id) {
@@ -47,5 +49,15 @@ public class HistoryPatientService {
         } catch (DataIntegrityViolationException e) {
             throw new DataBaseException(e.getMessage());
         }
+    }
+
+    @Transactional
+    public void updateStatus(Consultation consultation) {
+        HistoryPatient historyPatient = historyPatientRepository.findByConsultation_Id(consultation.getId());
+            if(!historyPatientRepository.existsById(consultation.getId())) throw new ResourceNotFoundException(consultation.getId());
+
+        historyPatient.setStatusConsultation(consultation.getStatusConsultation());
+
+        historyPatientRepository.save(historyPatient);
     }
 }

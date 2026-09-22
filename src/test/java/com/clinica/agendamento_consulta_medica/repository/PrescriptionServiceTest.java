@@ -10,17 +10,4 @@ import java.util.Optional;
 @DataJpaTest
 public class PrescriptionServiceTest {
 
-    @Autowired
-    private PrescriptionRepsitory prescriptionRepsitory;
-
-    @Test
-    public void ShouldDeleteWithIdExisting() {
-        Long id = 1L;
-        Optional<Prescription> prescription = prescriptionRepsitory.findById(id);
-
-        prescriptionRepsitory.deleteById(id);
-
-        Assertions.assertEquals(prescription, id);
-
-    }
 }

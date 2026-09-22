@@ -1,6 +1,6 @@
 package com.clinica.agendamento_consulta_medica.controller;
-import com.clinica.agendamento_consulta_medica.dto.medicalShedule.MedicalScheduleRequestDTO;
-import com.clinica.agendamento_consulta_medica.dto.medicalShedule.MedicalSheduleResponseDTO;
+import com.clinica.agendamento_consulta_medica.dto.medicalShedule.MedicalScheduleRequest;
+import com.clinica.agendamento_consulta_medica.dto.medicalShedule.MedicalSheduleResponse;
 import com.clinica.agendamento_consulta_medica.service.MedicalScheduleService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -10,29 +10,29 @@ import java.util.List;
 
 @RestController
 @RequestMapping( "/medicalshedule")
-public class MedicalScheduleResource {
+public class MedicalScheduleController {
 
     private  final  MedicalScheduleService medicalScheduleService;
 
-    public MedicalScheduleResource(MedicalScheduleService medicalScheduleService) {
+    public MedicalScheduleController(MedicalScheduleService medicalScheduleService) {
         this.medicalScheduleService = medicalScheduleService;
     }
 
     @PostMapping("/save")
-    public ResponseEntity<MedicalSheduleResponseDTO> save ( @Valid @RequestBody MedicalScheduleRequestDTO medicalSchedule){
-        MedicalSheduleResponseDTO medicalSchedules = medicalScheduleService.save(medicalSchedule);
+    public ResponseEntity<MedicalSheduleResponse> save (@Valid @RequestBody MedicalScheduleRequest medicalSchedule){
+        MedicalSheduleResponse medicalSchedules = medicalScheduleService.save(medicalSchedule);
         return ResponseEntity.status(HttpStatus.CREATED).body(medicalSchedules);
     }
 
     @GetMapping("/findAll")
-    public ResponseEntity<List<MedicalSheduleResponseDTO>> findAll(){
-        List<MedicalSheduleResponseDTO> medicalSchedules = medicalScheduleService.findAll();
+    public ResponseEntity<List<MedicalSheduleResponse>> findAll(){
+        List<MedicalSheduleResponse> medicalSchedules = medicalScheduleService.findAll();
         return ResponseEntity.ok().body(medicalSchedules);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<MedicalSheduleResponseDTO> findById(@PathVariable Long id){
-        MedicalSheduleResponseDTO medicalSchedule = medicalScheduleService.findById(id);
+    public ResponseEntity<MedicalSheduleResponse> findById(@PathVariable Long id){
+        MedicalSheduleResponse medicalSchedule = medicalScheduleService.findById(id);
         return ResponseEntity.ok().body(medicalSchedule);
     }
 
@@ -43,8 +43,8 @@ public class MedicalScheduleResource {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<MedicalSheduleResponseDTO> update(@PathVariable Long id,  @Valid @RequestBody MedicalScheduleRequestDTO medicalSchedule){
-        MedicalSheduleResponseDTO medicalSchedule1  = medicalScheduleService.update(id,medicalSchedule);
+    public ResponseEntity<MedicalSheduleResponse> update(@PathVariable Long id, @Valid @RequestBody MedicalScheduleRequest medicalSchedule){
+        MedicalSheduleResponse medicalSchedule1  = medicalScheduleService.update(id,medicalSchedule);
         return ResponseEntity.ok().body(medicalSchedule1);
     }
 }

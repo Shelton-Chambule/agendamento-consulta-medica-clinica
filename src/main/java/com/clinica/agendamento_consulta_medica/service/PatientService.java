@@ -1,13 +1,18 @@
 package com.clinica.agendamento_consulta_medica.service;
-import com.clinica.agendamento_consulta_medica.dto.patient.PatientRequestDTO;
-import com.clinica.agendamento_consulta_medica.dto.patient.PatientResponseDTO;
+import com.clinica.agendamento_consulta_medica.dto.patient.PatientRequest;
+import com.clinica.agendamento_consulta_medica.dto.patient.PatientResponse;
+import com.clinica.agendamento_consulta_medica.entities.Account;
 import com.clinica.agendamento_consulta_medica.entities.Patient;
+import com.clinica.agendamento_consulta_medica.entities.enums.AccountRole;
+import com.clinica.agendamento_consulta_medica.repository.AccountRepository;
 import com.clinica.agendamento_consulta_medica.repository.PatientRepository;
 import com.clinica.agendamento_consulta_medica.service.exception.DataBaseException;
 import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
-import com.clinica.agendamento_consulta_medica.service.exception.UniqueEmailException;
+import com.clinica.agendamento_consulta_medica.service.exception.UniqueLoginException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -16,63 +21,72 @@ import java.util.stream.Collectors;
 @Service
 public class PatientService {
 
-    private  final PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AccountRepository accountRepository;
 
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, PasswordEncoder passwordEncoder, AccountRepository accountRepository) {
         this.patientRepository = patientRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.accountRepository = accountRepository;
     }
 
-    public String   validateEmail(String email){
-        if(patientRepository.existsByEmail(email)){
-            throw new UniqueEmailException("This email already register!");
-        }
-        return email;
-    }
-
-    public PatientResponseDTO save(PatientRequestDTO patientRequestDTO) {
+    @Transactional
+    public PatientResponse registerPatient(PatientRequest patientRequestDTO) {
         Patient patient = new Patient();
+        Account account = new Account();
+
+        if(accountRepository.existsByLogin(account.getLogin())) throw new UniqueLoginException("This email already register!");
+
+        account.setLogin(patientRequestDTO.getLogin());
+        account.setPassword(passwordEncoder.encode(patientRequestDTO.getPassword()));
+        account.setAccountRole(AccountRole.PATIENT);
+
+        accountRepository.save(account);
+
         patient.setName(patientRequestDTO.getName());
-        patient.setEmail(validateEmail(patientRequestDTO.getEmail()));
         patient.setPhone(patientRequestDTO.getPhone());
+        patient.setDataNascimento(patientRequestDTO.getDataNascimento());
+       patient.setAccount(account);
         patientRepository.save(patient);
-        return new PatientResponseDTO(patient);
+        return new PatientResponse(patient);
+
     }
 
-    public List<PatientResponseDTO> findAll() {
+    public List<PatientResponse> findAll() {
         List<Patient> patientList = patientRepository.findAll();
-        return patientList.stream().map(PatientResponseDTO::new).collect(Collectors.toList());
+        return patientList.stream().map(PatientResponse::new).collect(Collectors.toList());
     }
 
-    public PatientResponseDTO findById(Long id) {
+    public PatientResponse findById(Long id) {
         Optional<Patient> patient = patientRepository.findById(id);
-        return new PatientResponseDTO(patient.orElseThrow(() -> new ResourceNotFoundException(id)));
+        return new PatientResponse(patient.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
-    public PatientResponseDTO update(Long id, PatientRequestDTO patient) {
-        try{
+    public PatientResponse update(Long id, PatientRequest patient) {
+        try {
             Patient patient1 = patientRepository.getReferenceById(id);
             updateData(patient1, patient);
             patientRepository.save(patient1);
-            return new PatientResponseDTO(patient1);
-        }catch (EntityNotFoundException e){
+            return new PatientResponse(patient1);
+        } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
     }
 
-    private void updateData(Patient patient1, PatientRequestDTO patient) {
+    private void updateData(Patient patient1, PatientRequest patient) {
         patient1.setName(patient.getName());
         patient1.setPhone(patient.getPhone());
-        patient1.setEmail(patient.getEmail());
     }
 
     public void deleteById(Long id) {
-        if(!patientRepository.existsById(id)){
+        if (!patientRepository.existsById(id)) {
             throw new ResourceNotFoundException(id);
         }
 
-        try{
+        try {
             patientRepository.deleteById(id);
-        }catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new DataBaseException(e.getMessage());
         }
     }

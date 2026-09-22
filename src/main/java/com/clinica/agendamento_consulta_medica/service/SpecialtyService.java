@@ -1,6 +1,6 @@
 package com.clinica.agendamento_consulta_medica.service;
-import com.clinica.agendamento_consulta_medica.dto.specialty.SpecialtyRequestDTO;
-import com.clinica.agendamento_consulta_medica.dto.specialty.SpecialtyResponseDTO;
+import com.clinica.agendamento_consulta_medica.dto.specialty.SpecialtyRequest;
+import com.clinica.agendamento_consulta_medica.dto.specialty.SpecialtyResponse;
 import com.clinica.agendamento_consulta_medica.entities.Doctor;
 import com.clinica.agendamento_consulta_medica.entities.Specialty;
 import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
@@ -23,7 +23,7 @@ public class SpecialtyService {
         this.doctorRepository = doctorRepository;
     }
 
-    public SpecialtyResponseDTO save(SpecialtyRequestDTO specialtyRequestDTO) {
+    public SpecialtyResponse save(SpecialtyRequest specialtyRequestDTO) {
 
         Doctor doctor = doctorRepository.findById(specialtyRequestDTO.getDoctorId()).orElseThrow(() ->
                 new ResourceNotFoundException(specialtyRequestDTO.getDoctorId()));
@@ -31,20 +31,19 @@ public class SpecialtyService {
         Specialty specialty = new Specialty();
 
         specialty.setName(specialtyRequestDTO.getName());
-        specialty.setPrice(specialtyRequestDTO.getPrice());
         specialty.setDoctors(doctor);
         especialtyRepository.save(specialty);
-        return new SpecialtyResponseDTO(specialty);
+        return new SpecialtyResponse(specialty);
     }
 
-    public List<SpecialtyResponseDTO> findAll() {
+    public List<SpecialtyResponse> findAll() {
         List<Specialty> specialty = especialtyRepository.findAll();
-        return specialty.stream().map(SpecialtyResponseDTO::new).collect(Collectors.toList());
+        return specialty.stream().map(SpecialtyResponse::new).collect(Collectors.toList());
     }
 
-    public SpecialtyResponseDTO findById(Long id) {
+    public SpecialtyResponse findById(Long id) {
         Optional<Specialty> especialty = especialtyRepository.findById(id);
-        return new SpecialtyResponseDTO(especialty.orElseThrow(() -> new ResourceNotFoundException(id)));
+        return new SpecialtyResponse(especialty.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
     public void deleteById(Long id) {
@@ -54,24 +53,23 @@ public class SpecialtyService {
         especialtyRepository.deleteById(id);
     }
 
-    public SpecialtyResponseDTO update(Long id, SpecialtyRequestDTO especialty) {
+    public SpecialtyResponse update(Long id, SpecialtyRequest especialty) {
 
         try {
             Specialty especialty1 = especialtyRepository.getReferenceById(id);
             updateData(especialty1, especialty);
             especialtyRepository.save(especialty1);
-            return new SpecialtyResponseDTO(especialty1);
+            return new SpecialtyResponse(especialty1);
         } catch (EntityNotFoundException exception) {
             throw new ResourceNotFoundException(id);
         }
     }
 
-    private void updateData(Specialty especialty1, SpecialtyRequestDTO specialtyRequestDTO) {
+    private void updateData(Specialty especialty1, SpecialtyRequest specialtyRequestDTO) {
         Doctor doctor = doctorRepository.findById(specialtyRequestDTO.getDoctorId()).orElseThrow(() ->
                 new ResourceNotFoundException(specialtyRequestDTO.getDoctorId()));
 
         especialty1.setName(specialtyRequestDTO.getName());
         especialty1.setDoctors(doctor);
-        especialty1.setPrice(specialtyRequestDTO.getPrice());
     }
 }

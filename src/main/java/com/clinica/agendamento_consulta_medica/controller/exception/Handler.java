@@ -1,7 +1,6 @@
 package com.clinica.agendamento_consulta_medica.controller.exception;
 import com.clinica.agendamento_consulta_medica.service.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -44,9 +43,9 @@ public class Handler {
         return ResponseEntity.status(status).body(standardError);
     }
 
-    @ExceptionHandler(UniqueEmailException.class)
-    public ResponseEntity<StandardError> uniqueEmail(UniqueEmailException uniqueEmail, HttpServletRequest request){
-        String error = "Error of validation";
+    @ExceptionHandler(UniqueLoginException.class)
+    public ResponseEntity<StandardError> uniqueEmail(UniqueLoginException uniqueEmail, HttpServletRequest request){
+        String error = "email must be unique";
         HttpStatus status = HttpStatus.CONFLICT;
         StandardError standardError = new StandardError(Instant.now(), status.value(), error, uniqueEmail.getMessage(),request.getRequestURI());
         return ResponseEntity.status(status).body(standardError);
@@ -54,7 +53,7 @@ public class Handler {
 
     @ExceptionHandler(ValidateStatusConsultation.class)
     public ResponseEntity<StandardError> validateStatus(ValidateStatusConsultation validateStatusConsultation, HttpServletRequest request){
-        String error = "Error of validation";
+        String error = "validate status";
         HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError standardError = new StandardError(Instant.now(), status.value(), error, validateStatusConsultation.getMessage(),request.getRequestURI());
         return ResponseEntity.status(status).body(standardError);

@@ -1,9 +1,8 @@
 package com.clinica.agendamento_consulta_medica.service;
-import com.clinica.agendamento_consulta_medica.dto.medicalShedule.MedicalScheduleRequestDTO;
-import com.clinica.agendamento_consulta_medica.dto.medicalShedule.MedicalSheduleResponseDTO;
+import com.clinica.agendamento_consulta_medica.dto.medicalShedule.MedicalScheduleRequest;
+import com.clinica.agendamento_consulta_medica.dto.medicalShedule.MedicalSheduleResponse;
 import com.clinica.agendamento_consulta_medica.entities.Doctor;
 import com.clinica.agendamento_consulta_medica.entities.MedicalSchedule;
-import com.clinica.agendamento_consulta_medica.entities.enums.DaysWeeks;
 import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
 import com.clinica.agendamento_consulta_medica.repository.MedicalScheduleRepository;
 import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
@@ -25,7 +24,7 @@ public class MedicalScheduleService {
         this.doctorRepository = doctorRepository;
     }
 
-    public MedicalSheduleResponseDTO save(MedicalScheduleRequestDTO medicalScheduleRequestDTO) {
+    public MedicalSheduleResponse save(MedicalScheduleRequest medicalScheduleRequestDTO) {
         Doctor doctor = doctorRepository.findById(medicalScheduleRequestDTO.getDoctorId()).orElseThrow(() -> new
                 ResourceNotFoundException(medicalScheduleRequestDTO.getDoctorId()));
 
@@ -34,21 +33,19 @@ public class MedicalScheduleService {
         medicalSchedule.setStarTime(medicalScheduleRequestDTO.getStarTime());
         medicalSchedule.setEndTime(medicalScheduleRequestDTO.getEndTime());
         medicalSchedule.setBreakTimes(medicalScheduleRequestDTO.getBreakTimes());
-        Set<DaysWeeks> days = medicalScheduleRequestDTO.getDaysOfWeek().stream().flatMap(s -> Arrays.stream(s.split(","))).map(String::trim).map(String::toUpperCase).map(DaysWeeks::valueOf).collect(Collectors.toSet());
-        medicalSchedule.setDaysOfWeek(days);
         medicalSchedule.setDoctor(doctor);
         medicalScheduleRepository.save(medicalSchedule);
-        return new MedicalSheduleResponseDTO(medicalSchedule);
+        return new MedicalSheduleResponse(medicalSchedule);
     }
 
-    public List<MedicalSheduleResponseDTO> findAll() {
+    public List<MedicalSheduleResponse> findAll() {
         List<MedicalSchedule> medicalSchedules = medicalScheduleRepository.findAll();
-        return medicalSchedules.stream().map(MedicalSheduleResponseDTO::new).collect(Collectors.toList());
+        return medicalSchedules.stream().map(MedicalSheduleResponse::new).collect(Collectors.toList());
     }
 
-    public MedicalSheduleResponseDTO findById(Long id) {
+    public MedicalSheduleResponse findById(Long id) {
         Optional<MedicalSchedule> medicalSchedule = medicalScheduleRepository.findById(id);
-        return new MedicalSheduleResponseDTO(medicalSchedule.orElseThrow(() -> new ResourceNotFoundException(id)));
+        return new MedicalSheduleResponse(medicalSchedule.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
     public void deleteById(Long id) {
@@ -60,18 +57,18 @@ public class MedicalScheduleService {
         medicalScheduleRepository.deleteById(id);
     }
 
-    public MedicalSheduleResponseDTO update(Long id, MedicalScheduleRequestDTO medicalSchedule){
+    public MedicalSheduleResponse update(Long id, MedicalScheduleRequest medicalSchedule){
         try{
             MedicalSchedule medicalSchedules = medicalScheduleRepository.getReferenceById(id);
             updateDate(medicalSchedules,medicalSchedule);
             medicalScheduleRepository.save(medicalSchedules);
-            return new MedicalSheduleResponseDTO(medicalSchedules);
+            return new MedicalSheduleResponse(medicalSchedules);
         }catch (ResourceNotFoundException exception){
             throw new IllegalArgumentException("Error while search id, verify if exists id");
         }
     }
 
-    private void updateDate(MedicalSchedule medicalSchedules, MedicalScheduleRequestDTO medicalScheduleRequestDTO) {
+    private void updateDate(MedicalSchedule medicalSchedules, MedicalScheduleRequest medicalScheduleRequestDTO) {
         medicalSchedules.setEndTime(medicalScheduleRequestDTO.getEndTime());
         medicalSchedules.setBreakTimes(medicalScheduleRequestDTO.getBreakTimes());
         medicalSchedules.setStarTime(medicalScheduleRequestDTO.getStarTime());
