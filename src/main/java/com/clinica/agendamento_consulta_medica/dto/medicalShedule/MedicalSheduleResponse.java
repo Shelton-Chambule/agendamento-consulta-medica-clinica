@@ -25,5 +25,6 @@ public class MedicalSheduleResponse {
         this.endTime = medicalSchedule.getEndTime();
         this.breakTimes =  medicalSchedule.getBreakTimes();
         this.doctorId = medicalSchedule.getDoctor().getDoctorId();
+        this.daysOfWeek = medicalSchedule.getDaysOfWeek().stream().map(String::toUpperCase).toList();
     }
 }
