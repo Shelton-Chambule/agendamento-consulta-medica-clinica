@@ -62,7 +62,7 @@ public class PatientService {
         return patientList.stream().map(PatientResponse::new).collect(Collectors.toList());
     }
 
-    public PatientResponse findById(Long id, Authentication authentication) throws java.nio.file.AccessDeniedException {
+    public PatientResponse findById(Long id, Authentication authentication) throws AccessDeniedException {
 
         Optional<Patient> patient = patientRepository.findById(id);
 
@@ -75,14 +75,14 @@ public class PatientService {
         return new PatientResponse(patient.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
-    public PatientResponse update(Long id, PatientRequest patient, Authentication authentication) throws java.nio.file.AccessDeniedException {
+    public PatientResponse update(Long id, PatientRequest patient, Authentication authentication) throws AccessDeniedException {
         try {
             Patient patient1 = patientRepository.getReferenceById(id);
             boolean admin = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_ADMIN"));
 
             boolean user = patient1.getAccount().getLogin().equals(authentication.getName());
 
-            if (!admin && !user) throw new java.nio.file.AccessDeniedException("Not authorization to this access");
+            if (!admin && !user) throw new AccessDeniedException("Not authorization to this access");
 
             updateData(patient1, patient);
             patientRepository.save(patient1);
