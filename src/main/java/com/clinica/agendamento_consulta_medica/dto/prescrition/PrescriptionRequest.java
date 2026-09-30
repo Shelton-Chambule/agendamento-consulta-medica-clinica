@@ -1,5 +1,6 @@
 package com.clinica.agendamento_consulta_medica.dto.prescrition;
 import com.clinica.agendamento_consulta_medica.entity.Prescription;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -13,20 +14,22 @@ import java.util.Set;
 @NoArgsConstructor
 public class PrescriptionRequest {
 
+    @JsonProperty(required = true)
     private LocalDate date;
 
-    @NotNull(message = "Required field")
     @NotBlank
+    @JsonProperty(required = true)
     private String observations;
 
-    @NotNull(message = "Required field")
     @NotBlank
-    private String dosagem;
+    @JsonProperty(required = true)
+    private String dosage;
 
     @NotBlank
-    @NotNull(message = "Required field")
+    @JsonProperty(required = true)
     private String frequency;
 
+    @JsonProperty(required = true)
     private Set<String> medications;
 
     @NotNull(message = "Required field")
@@ -36,7 +39,7 @@ public class PrescriptionRequest {
     public PrescriptionRequest(Prescription prescription) {
         date = prescription.getDate();
         observations = prescription.getObservations();
-        dosagem = prescription.getDosagem();
+        dosage = prescription.getDosage();
         frequency = prescription.getFrequency();
         medications = prescription.getMedications();
         consultationId = prescription.getConsultation().getId();

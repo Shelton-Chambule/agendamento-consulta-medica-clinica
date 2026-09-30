@@ -15,7 +15,7 @@ public class PrescriptionResponse {
     private Long id;
     private LocalDate date;
     private String observations;
-    private String dosagem;
+    private String dosage;
     private String frequency;
     private Set<String> medications;
 
@@ -24,7 +24,7 @@ public class PrescriptionResponse {
         date = prescription.getDate();
         observations = prescription.getObservations();
         medications = prescription.getMedications();
-        dosagem = prescription.getDosagem();
+        dosage = prescription.getDosage();
         frequency = prescription.getFrequency();
     }
 }

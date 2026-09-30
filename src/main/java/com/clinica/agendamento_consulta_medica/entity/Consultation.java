@@ -24,11 +24,7 @@ public class Consultation implements Serializable {
     
     private LocalDateTime moment;
 
-<<<<<<< Updated upstream:src/main/java/com/clinica/agendamento_consulta_medica/entity/Consultation.java
-    @Column()
-=======
     @Column(nullable = false)
->>>>>>> Stashed changes:src/main/java/com/clinica/agendamento_consulta_medica/entities/Consultation.java
     private LocalDate date;
 
     @Column(nullable = false)

@@ -5,6 +5,7 @@ import com.clinica.agendamento_consulta_medica.service.SpecialtyService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -29,13 +30,13 @@ public class SpecialtyController {
     }
 
     @GetMapping("/{specialtyId}")
-    public ResponseEntity<SpecialtyResponse> getOneSpecialty(@PathVariable Long specialtyId){
-        return ResponseEntity.ok().body(especialtyService.findById(specialtyId));
+    public ResponseEntity<SpecialtyResponse> getOneSpecialty(@PathVariable Long specialtyId, Authentication authentication){
+        return ResponseEntity.ok().body(especialtyService.findById(specialtyId, authentication));
     }
 
     @DeleteMapping("/{specialtyId}")
-    public  ResponseEntity<Void> deleteOneSpecialty(@PathVariable Long specialtyId){
-        especialtyService.deleteById(specialtyId);
+    public  ResponseEntity<Void> deleteOneSpecialty(@PathVariable Long specialtyId,Authentication authentication){
+        especialtyService.deleteById(specialtyId, authentication);
         return ResponseEntity.noContent().build();
     }
 

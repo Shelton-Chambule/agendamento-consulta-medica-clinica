@@ -20,30 +20,30 @@ public class Prescription implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @Column(nullable = false)
+    @Column(name = "observations",nullable = false)
     private String observations;
 
-    @Column(nullable = false)
-    private String dosagem;
+    @Column(name = "dosage",nullable = false)
+    private String dosage;
 
-    @Column(nullable = false)
+    @Column(name = "frequency",nullable = false)
     private String frequency;
 
-
+    @Column(name = "medications", nullable = false)
     private Set<String> medications;
 
     @ManyToOne
     @JoinColumn(name = "consultation_id")
     private Consultation consultation ;
 
-    public Prescription(Long id, LocalDate date, String observations, String dosagem, String frequency) {
+    public Prescription(Long id, LocalDate date, String observations, String dosage, String frequency) {
         this.id = id;
         this.date = date;
         this.observations = observations;
-        this.dosagem = dosagem;
+        this.dosage = dosage;
         this.frequency = frequency;
     }
 

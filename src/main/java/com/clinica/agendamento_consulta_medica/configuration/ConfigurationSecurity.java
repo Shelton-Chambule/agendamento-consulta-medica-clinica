@@ -47,6 +47,10 @@ public class ConfigurationSecurity{
                         .requestMatchers(HttpMethod.GET,"/specialtys/specialtyId").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE,"/specialtys/specialtyId").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT,"/specialtys/specialtyId").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/medicalschedules/save").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/medicalschedules/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/medicalschedules/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/medicalschedules/{id}").hasRole("ADMIN")
                         .anyRequest().authenticated()).
                 addFilterBefore(securityFilter,  UsernamePasswordAuthenticationFilter.class).build();
     }
