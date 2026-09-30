@@ -1,5 +1,4 @@
-package com.clinica.agendamento_consulta_medica.controller.exception;
-import com.clinica.agendamento_consulta_medica.service.exception.*;
+package com.clinica.agendamento_consulta_medica.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.time.Instant;
 
 @ControllerAdvice
-public class Handler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<StandardError> resourceNotFound(ResourceNotFoundException r, HttpServletRequest request) {
@@ -29,7 +28,7 @@ public class Handler {
 
     @ExceptionHandler(ScheduleConflictException.class)
     public ResponseEntity<StandardError> scheduleConflict(ScheduleConflictException data, HttpServletRequest request){
-        String error = "hours failed";
+        String error = "Hours failed";
         HttpStatus status = HttpStatus.CONFLICT;
         StandardError standardError = new StandardError(Instant.now(), status.value(), error, data.getMessage(),request.getRequestURI());
         return ResponseEntity.status(status).body(standardError);
@@ -45,7 +44,7 @@ public class Handler {
 
     @ExceptionHandler(UniqueLoginException.class)
     public ResponseEntity<StandardError> uniqueEmail(UniqueLoginException uniqueEmail, HttpServletRequest request){
-        String error = "email must be unique";
+        String error = "Email must be unique";
         HttpStatus status = HttpStatus.CONFLICT;
         StandardError standardError = new StandardError(Instant.now(), status.value(), error, uniqueEmail.getMessage(),request.getRequestURI());
         return ResponseEntity.status(status).body(standardError);
@@ -53,11 +52,17 @@ public class Handler {
 
     @ExceptionHandler(ValidateStatusConsultation.class)
     public ResponseEntity<StandardError> validateStatus(ValidateStatusConsultation validateStatusConsultation, HttpServletRequest request){
-        String error = "validate status";
+        String error = "Status error";
         HttpStatus status = HttpStatus.BAD_REQUEST;
         StandardError standardError = new StandardError(Instant.now(), status.value(), error, validateStatusConsultation.getMessage(),request.getRequestURI());
         return ResponseEntity.status(status).body(standardError);
     }
 
-
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<StandardError> accessDenied(AccessDeniedException access, HttpServletRequest request){
+        String error = "Access error";
+        HttpStatus status = HttpStatus.LOCKED;
+        StandardError standardError = new StandardError(Instant.now(),status.value(),error, access.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(standardError);
+    }
 }

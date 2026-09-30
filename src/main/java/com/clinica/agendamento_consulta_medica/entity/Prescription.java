@@ -1,4 +1,4 @@
-package com.clinica.agendamento_consulta_medica.entities;
+package com.clinica.agendamento_consulta_medica.entity;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,10 +19,20 @@ public class Prescription implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private LocalDate date;
+
+    @Column(nullable = false)
     private String observations;
+
+    @Column(nullable = false)
     private String dosagem;
+
+    @Column(nullable = false)
     private String frequency;
+
+
     private Set<String> medications;
 
     @ManyToOne

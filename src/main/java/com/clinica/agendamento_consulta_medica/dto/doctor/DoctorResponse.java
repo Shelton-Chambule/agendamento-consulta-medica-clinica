@@ -1,7 +1,7 @@
 package com.clinica.agendamento_consulta_medica.dto.doctor;
 import com.clinica.agendamento_consulta_medica.dto.medicalShedule.MedicalScheduleRequest;
-import com.clinica.agendamento_consulta_medica.entities.Doctor;
-import com.clinica.agendamento_consulta_medica.entities.Specialty;
+import com.clinica.agendamento_consulta_medica.entity.Doctor;
+import com.clinica.agendamento_consulta_medica.entity.Specialty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/prescription" )
+@RequestMapping("/prescriptions" )
 public class PrescriptionController {
 
     private final PrescriptionService prescriptionService;
@@ -18,33 +18,29 @@ public class PrescriptionController {
         this.prescriptionService = prescriptionService;
     }
 
-    @PostMapping("/save/prescription")
-    public ResponseEntity<PrescriptionResponse> save(@Valid  @RequestBody PrescriptionRequest prescriptionRequestDTO){
-        PrescriptionResponse prescriptions = prescriptionService.save(prescriptionRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(prescriptions);
+    @PostMapping("/create")
+    public ResponseEntity<PrescriptionResponse> createPrescription(@Valid  @RequestBody PrescriptionRequest prescriptionRequestDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(prescriptionService.save(prescriptionRequestDTO));
     }
 
-    @GetMapping("/findAll/prescription")
-    public ResponseEntity<List<PrescriptionResponse>> findAll(){
-        List<PrescriptionResponse> prescriptionDto = prescriptionService.findAll();
-        return ResponseEntity.ok().body(prescriptionDto);
+    @GetMapping("/getAll")
+    public ResponseEntity<List<PrescriptionResponse>> getAllPrescription(){
+        return ResponseEntity.ok().body(prescriptionService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PrescriptionResponse> findById(@PathVariable Long id){
-        PrescriptionResponse prescriptionDto = prescriptionService.findById(id);
-        return ResponseEntity.ok().body(prescriptionDto);
+    public ResponseEntity<PrescriptionResponse> getOnePrescription(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(prescriptionService.findById(id));
     }
 
     @DeleteMapping("/{id}")
-    public  ResponseEntity<Void> deleteById(@PathVariable Long id){
+    public  ResponseEntity<Void> deleteOnePrescription(@PathVariable Long id){
         prescriptionService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}")
-    public  ResponseEntity<PrescriptionResponse> update( @PathVariable Long id, @Valid @RequestBody PrescriptionRequest prescriptionDto ){
-        PrescriptionResponse prescriptionDto1 = prescriptionService.update(id,prescriptionDto);
-        return ResponseEntity.ok().body(prescriptionDto1);
+    @PutMapping("/{id}")
+    public  ResponseEntity<PrescriptionResponse> updatePrescription( @PathVariable Long id, @Valid @RequestBody PrescriptionRequest prescriptionDto ){
+        return ResponseEntity.status(HttpStatus.OK).body(prescriptionService.update(id,prescriptionDto));
     }
 }

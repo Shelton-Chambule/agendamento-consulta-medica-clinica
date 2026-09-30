@@ -1,17 +1,17 @@
 package com.clinica.agendamento_consulta_medica.service;
 import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationRequest;
 import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationResponse;
-import com.clinica.agendamento_consulta_medica.entities.Consultation;
-import com.clinica.agendamento_consulta_medica.entities.Doctor;
-import com.clinica.agendamento_consulta_medica.entities.Patient;
-import com.clinica.agendamento_consulta_medica.entities.enums.StatusConsultation;
+import com.clinica.agendamento_consulta_medica.entity.Consultation;
+import com.clinica.agendamento_consulta_medica.entity.Doctor;
+import com.clinica.agendamento_consulta_medica.entity.Patient;
+import com.clinica.agendamento_consulta_medica.entity.enums.StatusConsultation;
 import com.clinica.agendamento_consulta_medica.repository.ConsulationRepository;
 import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
 import com.clinica.agendamento_consulta_medica.repository.PatientRepository;
-import com.clinica.agendamento_consulta_medica.service.exception.DataBaseException;
-import com.clinica.agendamento_consulta_medica.service.exception.ProcessConsultation;
-import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
-import com.clinica.agendamento_consulta_medica.service.exception.ScheduleConflictException;
+import com.clinica.agendamento_consulta_medica.exception.DataBaseException;
+import com.clinica.agendamento_consulta_medica.exception.ProcessConsultation;
+import com.clinica.agendamento_consulta_medica.exception.ResourceNotFoundException;
+import com.clinica.agendamento_consulta_medica.exception.ScheduleConflictException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -49,7 +49,7 @@ public class ConsultationService {
                 continue;   // Mesmo horário em outro dia: permitido
             }
 
-            LocalTime existingStart = existing.getStarTime();
+            LocalTime existingStart = existing.getStartTime();
             LocalTime existingEnd = existingStart.plus(existing.getDuration());
 
             boolean timeOverlaps = startTime.isBefore(existingEnd) && existingStart.isBefore(endTime);
@@ -77,7 +77,7 @@ public class ConsultationService {
         consultation.setMoment(LocalDateTime.now());
         consultation.setDate(consultationDate);
         consultation.setDuration(consultationDto.getDuration());
-        consultation.setStarTime(starTime);
+        consultation.setStartTime(starTime);
         consultation.setDoctor(doctor);
         consultation.setPatient(patient);
         consultation.setStatusConsultation(StatusConsultation.WAITING);
@@ -138,9 +138,10 @@ public class ConsultationService {
     }
 
     private void updateData(Consultation consultation, ConsultationRequest consultationRequestDTO) {
+
         Doctor doctor = doctorRepository.findById(consultationRequestDTO.getDoctor()).orElseThrow(() -> new ResourceNotFoundException(consultationRequestDTO.getDoctor()));
 
-        consultation.setStarTime(consultationRequestDTO.getStartTime());
+        consultation.setStartTime(consultationRequestDTO.getStartTime());
         consultation.setDuration(consultationRequestDTO.getDuration());
         consultation.setDoctor(doctor);
     }

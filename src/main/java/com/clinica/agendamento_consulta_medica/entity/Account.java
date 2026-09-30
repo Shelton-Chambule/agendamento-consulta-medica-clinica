@@ -1,6 +1,9 @@
-package com.clinica.agendamento_consulta_medica.entities;
-import com.clinica.agendamento_consulta_medica.entities.enums.AccountRole;
+package com.clinica.agendamento_consulta_medica.entity;
+import com.clinica.agendamento_consulta_medica.entity.enums.AccountRole;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,8 +24,10 @@ public class Account implements UserDetails {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @NotBlank
     private String login;
 
+    @NotBlank
     @Column(nullable = false)
     private String password;
 

@@ -1,14 +1,13 @@
 package com.clinica.agendamento_consulta_medica.service;
 import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionRequest;
 import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionResponse;
-import com.clinica.agendamento_consulta_medica.entities.Consultation;
-import com.clinica.agendamento_consulta_medica.entities.Prescription;
-import com.clinica.agendamento_consulta_medica.entities.enums.StatusConsultation;
+import com.clinica.agendamento_consulta_medica.entity.Consultation;
+import com.clinica.agendamento_consulta_medica.entity.Prescription;
+import com.clinica.agendamento_consulta_medica.entity.enums.StatusConsultation;
 import com.clinica.agendamento_consulta_medica.repository.ConsulationRepository;
 import com.clinica.agendamento_consulta_medica.repository.PrescriptionRepository;
-import com.clinica.agendamento_consulta_medica.repository.PrescriptionRepository;
-import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
-import com.clinica.agendamento_consulta_medica.service.exception.ValidateStatusConsultation;
+import com.clinica.agendamento_consulta_medica.exception.ResourceNotFoundException;
+import com.clinica.agendamento_consulta_medica.exception.ValidateStatusConsultation;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -22,38 +21,26 @@ public class PrescriptionService {
     private final PrescriptionRepository prescriptionRepository;
     private final ConsulationRepository consulationRepository;
 
-    public PrescriptionService(PrescriptionRepository prescriptionRepsitory, ConsulationRepository consulationRepository) {
-        this.prescriptionRepository = prescriptionRepsitory;
+    public PrescriptionService(PrescriptionRepository prescriptionRepository, ConsulationRepository consulationRepository) {
+        this.prescriptionRepository = prescriptionRepository;
         this.consulationRepository = consulationRepository;
 
     }
 
-    private Long  validateStatusConsultation(Long IdConsultation) {
-        Consultation consultation = new Consultation();
-
-        if(!consulationRepository.existsById(IdConsultation)){
-            throw new ResourceNotFoundException(IdConsultation);
-        }
-
-        if (!(IdConsultation.equals(consultation.getId())) && consultation.getStatusConsultation().equals(StatusConsultation.CARRIED_OUT))
-            throw new ValidateStatusConsultation("Erro creating of prescription, verify id  of consultation");
-
-        return IdConsultation;
-    }
-
     public PrescriptionResponse save(PrescriptionRequest prescriptionRequestDTO) {
 
-        Consultation consultationId = consulationRepository.findById(prescriptionRequestDTO.getConsultationId()).orElseThrow(() ->
-                new ResourceNotFoundException(prescriptionRequestDTO.getConsultationId()));
+        Consultation consultation = consulationRepository.findById(prescriptionRequestDTO.getConsultationId()).orElseThrow(() -> new ResourceNotFoundException(prescriptionRequestDTO.getConsultationId()));
+
+        if(!consultation.getStatusConsultation().equals(StatusConsultation.CARRIED_OUT)) throw new ValidateStatusConsultation("Erro creating of prescription, verify id  of consultation");
 
         Prescription prescription = new Prescription();
 
         prescription.setDosagem(prescriptionRequestDTO.getDosagem());
         prescription.setFrequency(prescriptionRequestDTO.getFrequency());
         prescription.setMedications(prescriptionRequestDTO.getMedications());
-        prescription.setDate(LocalDate.now());
-        prescription.setConsultation(consultationId);
         prescription.setObservations(prescriptionRequestDTO.getObservations());
+        prescription.setConsultation(consultation);
+        prescription.setDate(LocalDate.now());
         prescriptionRepository.save(prescription);
         return new PrescriptionResponse(prescription);
     }
@@ -88,6 +75,8 @@ public class PrescriptionService {
 
     private void updateData(Prescription prescription, PrescriptionRequest prescriptionDto) {
         prescription.setObservations(prescriptionDto.getObservations());
+        prescription.setDosagem(prescription.getDosagem());
+        prescription.setMedications(prescriptionDto.getMedications());
         prescription.setDate(prescriptionDto.getDate());
     }
 }

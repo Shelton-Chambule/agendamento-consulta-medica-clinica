@@ -1,12 +1,11 @@
 package com.clinica.agendamento_consulta_medica.dto.medicalShedule;
-import com.clinica.agendamento_consulta_medica.entities.MedicalSchedule;
+import com.clinica.agendamento_consulta_medica.entity.MedicalSchedule;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Setter
 @Getter

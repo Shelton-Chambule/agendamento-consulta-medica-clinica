@@ -1,5 +1,5 @@
-package com.clinica.agendamento_consulta_medica.dto;
-import com.clinica.agendamento_consulta_medica.entities.Account;
+package com.clinica.agendamento_consulta_medica.dto.account;
+import com.clinica.agendamento_consulta_medica.entity.Account;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +10,6 @@ import lombok.Setter;
 public class AccountAdminResponse {
 
     private Long id;
-    private String name;
     private String login;
 
     public AccountAdminResponse(Account account) {

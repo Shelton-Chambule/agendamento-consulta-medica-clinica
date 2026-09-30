@@ -5,11 +5,13 @@ import com.clinica.agendamento_consulta_medica.service.DoctorService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
-@RequestMapping( "/doctor")
+@RequestMapping( "/doctors")
 public class DoctorController {
 
     private  final  DoctorService doctorService;
@@ -18,34 +20,30 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
-    @PostMapping("/save/doctor")
-    public ResponseEntity<DoctorResponse> save(@Valid  @RequestBody DoctorRequest doctor){
-        DoctorResponse doctors = doctorService.registerDoctor(doctor);
-        return ResponseEntity.status(HttpStatus.CREATED).body(doctors);
+    @PostMapping("/create")
+    public ResponseEntity<DoctorResponse> createDoctor(@Valid  @RequestBody DoctorRequest doctor){
+        return ResponseEntity.status(HttpStatus.CREATED).body(doctorService.registerDoctor(doctor));
     }
 
-    @GetMapping("/findAll")
-    public ResponseEntity<List<DoctorResponse>> findAll(){
-        List<DoctorResponse> doctor = doctorService.findAll();
-        return ResponseEntity.ok().body(doctor);
+    @GetMapping("/getAll")
+    public ResponseEntity<List<DoctorResponse>> getAllDoctor(){
+        return ResponseEntity.ok().body(doctorService.findAll());
     }
 
     @GetMapping("/{doctorId}")
-    public ResponseEntity<DoctorResponse> findById(@PathVariable Long doctorId){
-        DoctorResponse doctor = doctorService.findById(doctorId);
-        return ResponseEntity.ok().body(doctor);
+    public ResponseEntity<DoctorResponse> getOneDoctor(@PathVariable Long doctorId, Authentication authentication) throws AccessDeniedException {
+        return ResponseEntity.status(HttpStatus.OK).body(doctorService.findById(doctorId,authentication));
     }
 
     @DeleteMapping("/{doctorId}")
-    public  ResponseEntity<Void> deleteById(@PathVariable Long doctorId){
-        doctorService.deleteById(doctorId);
+    public  ResponseEntity<Void> deleteOneDoctor(@PathVariable Long doctorId, Authentication authentication){
+        doctorService.deleteById(doctorId,authentication);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{doctorId}")
-    public ResponseEntity<DoctorResponse> update(@PathVariable Long doctorId, @Valid @RequestBody DoctorRequest doctor){
-        DoctorResponse doctor1 = doctorService.update(doctorId,doctor);
-        return ResponseEntity.ok().body(doctor1);
+    public ResponseEntity<DoctorResponse> updateDoctor(@PathVariable Long doctorId, @Valid @RequestBody DoctorRequest doctor, Authentication authentication) throws AccessDeniedException {
+        return ResponseEntity.status(HttpStatus.OK).body(doctorService.update(doctorId,doctor,authentication));
     }
 
 }

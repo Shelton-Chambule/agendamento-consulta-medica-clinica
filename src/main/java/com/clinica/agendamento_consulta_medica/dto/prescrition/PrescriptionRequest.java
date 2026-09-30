@@ -1,5 +1,5 @@
 package com.clinica.agendamento_consulta_medica.dto.prescrition;
-import com.clinica.agendamento_consulta_medica.entities.Prescription;
+import com.clinica.agendamento_consulta_medica.entity.Prescription;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

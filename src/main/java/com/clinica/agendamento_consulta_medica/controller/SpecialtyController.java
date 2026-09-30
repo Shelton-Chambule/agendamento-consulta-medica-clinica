@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/specialty")
+@RequestMapping("/specialtys")
 public class SpecialtyController {
 
     private  final  SpecialtyService especialtyService;
@@ -18,34 +18,30 @@ public class SpecialtyController {
         this.especialtyService = especialtyService;
     }
 
-    @PostMapping("/save/specialty")
+    @PostMapping("/save")
     public ResponseEntity<SpecialtyResponse> save(@Valid @RequestBody SpecialtyRequest specialty){
-        SpecialtyResponse specialtys = especialtyService.save(specialty);
-        return ResponseEntity.status(HttpStatus.CREATED).body(specialtys);
+        return ResponseEntity.status(HttpStatus.CREATED).body(especialtyService.save(specialty));
     }
 
-    @GetMapping("/find/specialty")
-    public ResponseEntity<List<SpecialtyResponse>> findAll(){
-        List<SpecialtyResponse> specialty = especialtyService.findAll();
-        return ResponseEntity.ok().body(specialty);
+    @GetMapping("/getAll")
+    public ResponseEntity<List<SpecialtyResponse>> getAllSpecialty(){
+        return ResponseEntity.ok().body(especialtyService.findAll());
     }
 
     @GetMapping("/{specialtyId}")
-    public ResponseEntity<SpecialtyResponse> findById(@PathVariable Long specialtyId){
-        SpecialtyResponse specialty = especialtyService.findById(specialtyId);
-        return ResponseEntity.ok().body(specialty);
+    public ResponseEntity<SpecialtyResponse> getOneSpecialty(@PathVariable Long specialtyId){
+        return ResponseEntity.ok().body(especialtyService.findById(specialtyId));
     }
 
     @DeleteMapping("/{specialtyId}")
-    public  ResponseEntity<Void> deleteById(@PathVariable Long specialtyId){
+    public  ResponseEntity<Void> deleteOneSpecialty(@PathVariable Long specialtyId){
         especialtyService.deleteById(specialtyId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{specialtyId}")
-    public  ResponseEntity<SpecialtyResponse> update(@PathVariable Long specialtyId, @Valid @RequestBody SpecialtyRequest specialty){
-        SpecialtyResponse specialty1 = especialtyService.update(specialtyId,specialty);
-        return ResponseEntity.ok().body(specialty1);
+    public  ResponseEntity<SpecialtyResponse> updateSpecialty(@PathVariable Long specialtyId, @Valid @RequestBody SpecialtyRequest specialty){
+        return ResponseEntity.ok().body( especialtyService.update(specialtyId,specialty));
     }
 
 }

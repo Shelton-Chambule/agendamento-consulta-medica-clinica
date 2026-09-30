@@ -1,16 +1,15 @@
 package com.clinica.agendamento_consulta_medica.service;
 import com.clinica.agendamento_consulta_medica.dto.medicalShedule.MedicalScheduleRequest;
 import com.clinica.agendamento_consulta_medica.dto.medicalShedule.MedicalSheduleResponse;
-import com.clinica.agendamento_consulta_medica.entities.Doctor;
-import com.clinica.agendamento_consulta_medica.entities.MedicalSchedule;
+import com.clinica.agendamento_consulta_medica.entity.Doctor;
+import com.clinica.agendamento_consulta_medica.entity.MedicalSchedule;
 import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
 import com.clinica.agendamento_consulta_medica.repository.MedicalScheduleRepository;
-import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
+import com.clinica.agendamento_consulta_medica.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-import java.util.Arrays;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service

@@ -1,5 +1,5 @@
 package com.clinica.agendamento_consulta_medica.dto.specialty;
-import com.clinica.agendamento_consulta_medica.entities.Specialty;
+import com.clinica.agendamento_consulta_medica.entity.Specialty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
