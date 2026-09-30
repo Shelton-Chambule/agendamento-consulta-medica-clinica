@@ -1,5 +1,5 @@
 package com.clinica.agendamento_consulta_medica.repository;
-import com.clinica.agendamento_consulta_medica.entities.Account;
+import com.clinica.agendamento_consulta_medica.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;

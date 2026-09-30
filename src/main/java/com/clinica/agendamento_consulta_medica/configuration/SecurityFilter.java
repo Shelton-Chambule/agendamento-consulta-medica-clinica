@@ -21,7 +21,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     public SecurityFilter(TokenService tokenService, AccountRepository accountRepository) {
         this.tokenService = tokenService;
         this.accountRepository = accountRepository;
-
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.clinica.agendamento_consulta_medica.dto.consultation;
-import com.clinica.agendamento_consulta_medica.entities.Consultation;
+import com.clinica.agendamento_consulta_medica.entity.Consultation;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -25,6 +26,7 @@ public class ConsultationRequest {
     private LocalDate date;
 
     @JsonFormat(pattern = "HH:mm:ss")
+    @JsonProperty(required = true)
     @NotNull(message = "the starTime not can be null")
     private LocalTime startTime;
 

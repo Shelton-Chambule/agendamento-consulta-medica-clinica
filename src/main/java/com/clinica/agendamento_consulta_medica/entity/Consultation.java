@@ -1,5 +1,5 @@
-package com.clinica.agendamento_consulta_medica.entities;
-import com.clinica.agendamento_consulta_medica.entities.enums.StatusConsultation;
+package com.clinica.agendamento_consulta_medica.entity;
+import com.clinica.agendamento_consulta_medica.entity.enums.StatusConsultation;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +21,8 @@ public class Consultation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime moment;
+
+    @Column()
     private LocalDate date;
     private LocalTime startTime;
     private Duration duration;

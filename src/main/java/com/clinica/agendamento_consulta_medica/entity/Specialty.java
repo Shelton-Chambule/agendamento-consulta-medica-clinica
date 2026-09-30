@@ -1,4 +1,4 @@
-package com.clinica.agendamento_consulta_medica.entities;
+package com.clinica.agendamento_consulta_medica.entity;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,6 +16,8 @@ public class Specialty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String name;
 
    @ManyToOne

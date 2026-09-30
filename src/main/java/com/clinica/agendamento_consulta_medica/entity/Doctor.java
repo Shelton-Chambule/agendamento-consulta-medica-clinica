@@ -1,5 +1,7 @@
-package com.clinica.agendamento_consulta_medica.entities;
+package com.clinica.agendamento_consulta_medica.entity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import java.util.*;
 
@@ -14,8 +16,15 @@ public class Doctor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "doctor_id")
     private Long doctorId;
+
+    @Column(nullable = false)
+    @NotBlank
     private String name;
+
+    @Column(nullable = false)
+    @NotBlank
     private String phone;
 
     @OneToMany(mappedBy = "doctors")
@@ -24,7 +33,7 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor")
     private List<Consultation> consultations = new ArrayList<>();
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id", nullable = false, unique = true)
     private Account account;
 

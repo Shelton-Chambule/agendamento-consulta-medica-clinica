@@ -1,12 +1,14 @@
 package com.clinica.agendamento_consulta_medica.service;
 import com.clinica.agendamento_consulta_medica.dto.specialty.SpecialtyRequest;
 import com.clinica.agendamento_consulta_medica.dto.specialty.SpecialtyResponse;
-import com.clinica.agendamento_consulta_medica.entities.Doctor;
-import com.clinica.agendamento_consulta_medica.entities.Specialty;
+import com.clinica.agendamento_consulta_medica.entity.Doctor;
+import com.clinica.agendamento_consulta_medica.entity.Specialty;
+import com.clinica.agendamento_consulta_medica.exception.AccessDeniedException;
 import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
 import com.clinica.agendamento_consulta_medica.repository.SpecialtyRepository;
-import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
+import com.clinica.agendamento_consulta_medica.exception.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -41,15 +43,25 @@ public class SpecialtyService {
         return specialty.stream().map(SpecialtyResponse::new).collect(Collectors.toList());
     }
 
-    public SpecialtyResponse findById(Long id) {
+    public SpecialtyResponse findById(Long id, Authentication authentication) {
+
         Optional<Specialty> especialty = especialtyRepository.findById(id);
+
+        boolean admin = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_ADMIN"));
+
+        if(!admin) throw  new AccessDeniedException(" Access denied,  you don,t  authorization");
+
         return new SpecialtyResponse(especialty.orElseThrow(() -> new ResourceNotFoundException(id)));
     }
 
-    public void deleteById(Long id) {
-        if (!especialtyRepository.existsById(id)) {
-            throw new ResourceNotFoundException(id);
-        }
+    public void deleteById(Long id, Authentication authentication) {
+
+        especialtyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+
+        boolean admin = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_ADMIN"));
+
+        if(!admin) throw new AccessDeniedException("Access denied!");
+
         especialtyRepository.deleteById(id);
     }
 

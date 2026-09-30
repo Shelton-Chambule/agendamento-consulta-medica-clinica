@@ -1,4 +1,4 @@
-package com.clinica.agendamento_consulta_medica.entities.enums;
+package com.clinica.agendamento_consulta_medica.entity.enums;
 public enum StatusConsultation {
 
     WAITING,

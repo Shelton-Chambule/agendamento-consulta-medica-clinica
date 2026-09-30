@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping( "/medicalshedule")
+@RequestMapping( "/medicalschedules")
 public class MedicalScheduleController {
 
     private  final  MedicalScheduleService medicalScheduleService;
@@ -25,26 +25,23 @@ public class MedicalScheduleController {
     }
 
     @GetMapping("/findAll")
-    public ResponseEntity<List<MedicalSheduleResponse>> findAll(){
-        List<MedicalSheduleResponse> medicalSchedules = medicalScheduleService.findAll();
-        return ResponseEntity.ok().body(medicalSchedules);
+    public ResponseEntity<List<MedicalSheduleResponse>> getAllMedicalSchedule(){
+        return ResponseEntity.ok().body( medicalScheduleService.findAll());
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<MedicalSheduleResponse> findById(@PathVariable Long id){
-        MedicalSheduleResponse medicalSchedule = medicalScheduleService.findById(id);
-        return ResponseEntity.ok().body(medicalSchedule);
+    @GetMapping("/{id}")
+    public ResponseEntity<MedicalSheduleResponse> getOneMedicalSchedule(@PathVariable Long id){
+        return ResponseEntity.ok().body(medicalScheduleService.findById(id));
     }
 
-    @DeleteMapping(value = "/{id}")
-    public  ResponseEntity<Void> deleteById(@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    public  ResponseEntity<Void> deleteOneMedicalSchedule(@PathVariable Long id){
         medicalScheduleService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<MedicalSheduleResponse> update(@PathVariable Long id, @Valid @RequestBody MedicalScheduleRequest medicalSchedule){
-        MedicalSheduleResponse medicalSchedule1  = medicalScheduleService.update(id,medicalSchedule);
-        return ResponseEntity.ok().body(medicalSchedule1);
+    @PutMapping("/{id}")
+    public ResponseEntity<MedicalSheduleResponse> updateMedicalSchedule(@PathVariable Long id, @Valid @RequestBody MedicalScheduleRequest medicalSchedule){
+        return ResponseEntity.status(HttpStatus.OK).body(medicalScheduleService.update(id,medicalSchedule));
     }
 }

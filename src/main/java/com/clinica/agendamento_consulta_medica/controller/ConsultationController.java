@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping( "/consultation")
+@RequestMapping( "/consultations")
 public class ConsultationController {
 
     private  final  ConsultationService consultationService;
@@ -18,39 +18,34 @@ public class ConsultationController {
         this.consultationService = consultationService;
     }
 
-    @PostMapping("/save/consultation")
-    public ResponseEntity<ConsultationResponse>  save(@Valid  @RequestBody ConsultationRequest consultation){
-        ConsultationResponse consultations = consultationService.save(consultation);
-        return ResponseEntity.status(HttpStatus.CREATED).body(consultations);
+    @PostMapping("/save")
+    public ResponseEntity<ConsultationResponse>  createConsultation( @Valid  @RequestBody ConsultationRequest consultation){
+        return ResponseEntity.status(HttpStatus.CREATED).body(consultationService.save(consultation));
     }
 
     @PostMapping("/{consultationId}/process")
-    public ResponseEntity<ConsultationResponse> process(@PathVariable Long consultationId){
-        ConsultationResponse consultations = consultationService.processConsultation(consultationId);
-        return ResponseEntity.ok().body(consultations);
+    public ResponseEntity<ConsultationResponse> processConsultation(@PathVariable Long consultationId){
+        return ResponseEntity.ok().body(consultationService.processConsultation(consultationId));
     }
 
-    @GetMapping("/findAll")
-    public ResponseEntity<List<ConsultationResponse>> findAll(){
-        List<ConsultationResponse> consultation = consultationService.findAll();
-        return ResponseEntity.ok().body(consultation);
+    @GetMapping("/getAll")
+    public ResponseEntity<List<ConsultationResponse>> getAllConsultation(){
+        return ResponseEntity.ok().body(consultationService.findAll());
     }
 
     @GetMapping("/{consultationId}")
-    public ResponseEntity<ConsultationResponse> findById(@PathVariable Long consultationId){
-        ConsultationResponse consultation = consultationService.findById(consultationId);
-        return ResponseEntity.ok().body(consultation);
+    public ResponseEntity<ConsultationResponse> getOneConsultation(@PathVariable Long consultationId){
+        return ResponseEntity.ok().body(consultationService.findById(consultationId));
     }
 
     @DeleteMapping("/{consultationId}")
-    public  ResponseEntity<Void> deleteById(@PathVariable Long consultationId){
+    public  ResponseEntity<Void> deleteOneConsultation(@PathVariable Long consultationId){
         consultationService.deleteById(consultationId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{consultationId}")
-    public ResponseEntity<ConsultationResponse> update(@PathVariable Long consultationId, @Valid @RequestBody ConsultationRequest consultation){
-        ConsultationResponse consultation1 = consultationService.update(consultationId, consultation);
-        return ResponseEntity.ok().body(consultation1);
+    public ResponseEntity<ConsultationResponse> updateConsultation(@PathVariable Long consultationId, @Valid @RequestBody ConsultationRequest consultation){
+        return ResponseEntity.ok().body(consultationService.update(consultationId,consultation));
     }
 }

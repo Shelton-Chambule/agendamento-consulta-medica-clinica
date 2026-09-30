@@ -1,5 +1,5 @@
 package com.clinica.agendamento_consulta_medica.repository;
-import com.clinica.agendamento_consulta_medica.entities.Doctor;
+import com.clinica.agendamento_consulta_medica.entity.Doctor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

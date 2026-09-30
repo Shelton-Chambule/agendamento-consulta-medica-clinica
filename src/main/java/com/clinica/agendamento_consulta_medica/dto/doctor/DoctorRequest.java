@@ -1,5 +1,5 @@
 package com.clinica.agendamento_consulta_medica.dto.doctor;
-import com.clinica.agendamento_consulta_medica.entities.Doctor;
+import com.clinica.agendamento_consulta_medica.entity.Doctor;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

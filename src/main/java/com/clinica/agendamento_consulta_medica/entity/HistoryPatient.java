@@ -1,5 +1,5 @@
-package com.clinica.agendamento_consulta_medica.entities;
-import com.clinica.agendamento_consulta_medica.entities.enums.StatusConsultation;
+package com.clinica.agendamento_consulta_medica.entity;
+import com.clinica.agendamento_consulta_medica.entity.enums.StatusConsultation;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,6 +14,7 @@ public class HistoryPatient {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @Column(name = "history_id")
     private Long id;
 
     @OneToOne

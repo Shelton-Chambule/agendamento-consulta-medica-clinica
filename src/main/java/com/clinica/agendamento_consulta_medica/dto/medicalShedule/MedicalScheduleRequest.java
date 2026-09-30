@@ -1,8 +1,7 @@
 package com.clinica.agendamento_consulta_medica.dto.medicalShedule;
-import com.clinica.agendamento_consulta_medica.entities.MedicalSchedule;
+import com.clinica.agendamento_consulta_medica.entity.MedicalSchedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

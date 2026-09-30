@@ -1,6 +1,6 @@
 package com.clinica.agendamento_consulta_medica.dto.history;
-import com.clinica.agendamento_consulta_medica.entities.HistoryPatient;
-import com.clinica.agendamento_consulta_medica.entities.enums.StatusConsultation;
+import com.clinica.agendamento_consulta_medica.entity.HistoryPatient;
+import com.clinica.agendamento_consulta_medica.entity.enums.StatusConsultation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,7 +25,7 @@ public class HistoryPatientResponse {
         historyId = historyPatient.getId();
         patientId =  historyPatient.getConsultation().getPatient().getPatientId();
         namePatient = historyPatient.getConsultation().getPatient().getName();
-        statTime = historyPatient.getConsultation().getStarTime();
+        statTime = historyPatient.getConsultation().getStartTime();
         duration = historyPatient.getConsultation().getDuration();
         date = historyPatient.getConsultation().getDate();
         statusConsultation  = historyPatient.getStatusConsultation();

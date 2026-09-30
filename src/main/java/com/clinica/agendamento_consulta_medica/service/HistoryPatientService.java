@@ -1,10 +1,10 @@
 package com.clinica.agendamento_consulta_medica.service;
 import com.clinica.agendamento_consulta_medica.dto.history.HistoryPatientResponse;
-import com.clinica.agendamento_consulta_medica.entities.Consultation;
-import com.clinica.agendamento_consulta_medica.entities.HistoryPatient;
+import com.clinica.agendamento_consulta_medica.entity.Consultation;
+import com.clinica.agendamento_consulta_medica.entity.HistoryPatient;
 import com.clinica.agendamento_consulta_medica.repository.HistoryPatientRepository;
-import com.clinica.agendamento_consulta_medica.service.exception.DataBaseException;
-import com.clinica.agendamento_consulta_medica.service.exception.ResourceNotFoundException;
+import com.clinica.agendamento_consulta_medica.exception.DataBaseException;
+import com.clinica.agendamento_consulta_medica.exception.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
