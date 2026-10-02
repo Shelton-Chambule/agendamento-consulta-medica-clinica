@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -33,18 +32,18 @@ public class PatientController {
     }
 
     @GetMapping("/{patientId}")
-    public ResponseEntity<PatientResponse> getOnePatient(@PathVariable Long patientId, Authentication authentication) throws AccessDeniedException {
+    public ResponseEntity<PatientResponse> getOnePatient(@PathVariable Long patientId, Authentication authentication) {
         return ResponseEntity.ok().body(patientService.findById(patientId,authentication));
     }
 
     @DeleteMapping("/{patientId}")
-    public ResponseEntity<Void> deleteOnePatient(@PathVariable Long patientId, Authentication authentication) throws AccessDeniedException {
+    public ResponseEntity<Void> deleteOnePatient(@PathVariable Long patientId, Authentication authentication) {
         patientService.deleteById(patientId,authentication);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{patientId}")
-    public ResponseEntity<PatientResponse> updateOnePatient(@PathVariable Long patientId, @Valid @RequestBody PatientRequest patient,Authentication authentication) throws AccessDeniedException {
+    public ResponseEntity<PatientResponse> updateOnePatient(@PathVariable Long patientId, @Valid @RequestBody PatientRequest patient,Authentication authentication) {
         return ResponseEntity.ok().body(patientService.update(patientId, patient,authentication));
     }
 }

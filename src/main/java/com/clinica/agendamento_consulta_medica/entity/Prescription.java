@@ -32,7 +32,9 @@ public class Prescription implements Serializable {
     @Column(name = "frequency",nullable = false)
     private String frequency;
 
-    @Column(name = "medications", nullable = false)
+    @ElementCollection
+    @CollectionTable(name = "tb_prescription_medication", joinColumns = @JoinColumn(name = "prescription_id"))
+    @Column(name = "medication", nullable = false)
     private Set<String> medications;
 
     @ManyToOne

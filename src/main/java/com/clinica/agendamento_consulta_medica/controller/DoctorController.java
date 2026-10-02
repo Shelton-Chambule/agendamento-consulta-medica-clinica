@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -31,7 +30,7 @@ public class DoctorController {
     }
 
     @GetMapping("/{doctorId}")
-    public ResponseEntity<DoctorResponse> getOneDoctor(@PathVariable Long doctorId, Authentication authentication) throws AccessDeniedException {
+    public ResponseEntity<DoctorResponse> getOneDoctor(@PathVariable Long doctorId, Authentication authentication) {
         return ResponseEntity.status(HttpStatus.OK).body(doctorService.findById(doctorId,authentication));
     }
 
@@ -42,7 +41,7 @@ public class DoctorController {
     }
 
     @PutMapping("/{doctorId}")
-    public ResponseEntity<DoctorResponse> updateDoctor(@PathVariable Long doctorId, @Valid @RequestBody DoctorRequest doctor, Authentication authentication) throws AccessDeniedException {
+    public ResponseEntity<DoctorResponse> updateDoctor(@PathVariable Long doctorId, @Valid @RequestBody DoctorRequest doctor, Authentication authentication) {
         return ResponseEntity.status(HttpStatus.OK).body(doctorService.update(doctorId,doctor,authentication));
     }
 

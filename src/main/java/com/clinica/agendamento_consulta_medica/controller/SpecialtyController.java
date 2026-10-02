@@ -30,8 +30,8 @@ public class SpecialtyController {
     }
 
     @GetMapping("/{specialtyId}")
-    public ResponseEntity<SpecialtyResponse> getOneSpecialty(@PathVariable Long specialtyId, Authentication authentication){
-        return ResponseEntity.ok().body(especialtyService.findById(specialtyId, authentication));
+    public ResponseEntity<SpecialtyResponse> getOneSpecialty(@PathVariable Long specialtyId){
+        return ResponseEntity.ok().body(especialtyService.findById(specialtyId));
     }
 
     @DeleteMapping("/{specialtyId}")
@@ -41,8 +41,10 @@ public class SpecialtyController {
     }
 
     @PutMapping("/{specialtyId}")
-    public  ResponseEntity<SpecialtyResponse> updateSpecialty(@PathVariable Long specialtyId, @Valid @RequestBody SpecialtyRequest specialty){
-        return ResponseEntity.ok().body( especialtyService.update(specialtyId,specialty));
+    public  ResponseEntity<SpecialtyResponse> updateSpecialty(@PathVariable Long specialtyId,
+                                                               @Valid @RequestBody SpecialtyRequest specialty,
+                                                               Authentication authentication){
+        return ResponseEntity.ok().body(especialtyService.update(specialtyId, specialty, authentication));
     }
 
 }

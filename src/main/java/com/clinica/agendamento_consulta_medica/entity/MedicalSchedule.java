@@ -27,7 +27,9 @@ public class MedicalSchedule {
     @Column(nullable = false)
     private LocalTime breakTimes;
 
-    @Column(nullable = false)
+    @ElementCollection
+    @CollectionTable(name = "tb_medical_schedule_day", joinColumns = @JoinColumn(name = "medical_schedule_id"))
+    @Column(name = "day_of_week", nullable = false)
     private List<String> daysOfWeek;
 
     @ManyToOne

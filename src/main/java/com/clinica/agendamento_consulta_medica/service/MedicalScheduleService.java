@@ -7,6 +7,7 @@ import com.clinica.agendamento_consulta_medica.exception.AccessDeniedException;
 import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
 import com.clinica.agendamento_consulta_medica.repository.MedicalScheduleRepository;
 import com.clinica.agendamento_consulta_medica.exception.ResourceNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -15,24 +16,24 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MedicalScheduleService {
 
     private final  MedicalScheduleRepository medicalScheduleRepository;
     private final DoctorRepository doctorRepository;
 
-    public MedicalScheduleService(MedicalScheduleRepository medicalScheduleRepository, DoctorRepository doctorRepository) {
-        this.medicalScheduleRepository = medicalScheduleRepository;
-        this.doctorRepository = doctorRepository;
-    }
-
     public MedicalSheduleResponse save(MedicalScheduleRequest medicalScheduleRequestDTO, Authentication authentication) {
+
+        if (!medicalScheduleRequestDTO.getStarTime().isBefore(medicalScheduleRequestDTO.getEndTime())) {
+            throw new IllegalArgumentException("Schedule start time must be before end time.");
+        }
 
         Doctor doctor = doctorRepository.findById(medicalScheduleRequestDTO.getDoctorId()).orElseThrow(() -> new
                 ResourceNotFoundException(medicalScheduleRequestDTO.getDoctorId()));
 
         boolean admin = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_ADMIN"));
 
-        if(!admin) throw  new AccessDeniedException("Not authorization to this access");
+        if(!admin) throw new AccessDeniedException("You do not have permission to create medical schedules.");
 
         MedicalSchedule medicalSchedule = new MedicalSchedule();
 
@@ -50,14 +51,10 @@ public class MedicalScheduleService {
         return medicalSchedules.stream().map(MedicalSheduleResponse::new).collect(Collectors.toList());
     }
 
-    public MedicalSheduleResponse findById(Long id, Authentication authentication) {
-
-        boolean admin = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_ADMIN"));
-
-        if(!admin) throw  new AccessDeniedException("Not authorization to this access");
-
-        Optional<MedicalSchedule> medicalSchedule = medicalScheduleRepository.findById(id);
-        return new MedicalSheduleResponse(medicalSchedule.orElseThrow(() -> new ResourceNotFoundException(id)));
+    public MedicalSheduleResponse findById(Long id) {
+        MedicalSchedule medicalSchedule = medicalScheduleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
+        return new MedicalSheduleResponse(medicalSchedule);
     }
 
     public void deleteById(Long id , Authentication authentication) {
@@ -66,7 +63,7 @@ public class MedicalScheduleService {
 
         boolean admin = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_ADMIN"));
 
-        if(!admin) throw  new AccessDeniedException("Not authorization to this access");
+        if(!admin) throw new AccessDeniedException("You do not have permission to delete medical schedules.");
 
         medicalScheduleRepository.deleteById(id);
     }
@@ -75,22 +72,25 @@ public class MedicalScheduleService {
 
         boolean admin = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_ADMIN"));
 
-        if(!admin) throw  new AccessDeniedException("Not authorization to this access");
+        if(!admin) throw new AccessDeniedException("You do not have permission to update medical schedules.");
 
-        try{
-            MedicalSchedule medicalSchedules = medicalScheduleRepository.getReferenceById(id);
-            updateDate(medicalSchedules,medicalSchedule);
-            medicalScheduleRepository.save(medicalSchedules);
-            return new MedicalSheduleResponse(medicalSchedules);
-        }catch (ResourceNotFoundException exception){
-            throw new IllegalArgumentException("Error while search id, verify if exists id");
-        }
+        MedicalSchedule medicalScheduleEntity = medicalScheduleRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
+        updateDate(medicalScheduleEntity, medicalSchedule);
+        medicalScheduleRepository.save(medicalScheduleEntity);
+        return new MedicalSheduleResponse(medicalScheduleEntity);
     }
 
     private void updateDate(MedicalSchedule medicalSchedules, MedicalScheduleRequest medicalScheduleRequestDTO) {
+        if (!medicalScheduleRequestDTO.getStarTime().isBefore(medicalScheduleRequestDTO.getEndTime())) {
+            throw new IllegalArgumentException("Schedule start time must be before end time.");
+        }
+        Doctor doctor = doctorRepository.findById(medicalScheduleRequestDTO.getDoctorId())
+                .orElseThrow(() -> new ResourceNotFoundException(medicalScheduleRequestDTO.getDoctorId()));
         medicalSchedules.setEndTime(medicalScheduleRequestDTO.getEndTime());
         medicalSchedules.setBreakTimes(medicalScheduleRequestDTO.getBreakTimes());
         medicalSchedules.setStarTime(medicalScheduleRequestDTO.getStarTime());
         medicalSchedules.setDaysOfWeek(medicalScheduleRequestDTO.getDaysOfWeek());
+        medicalSchedules.setDoctor(doctor);
     }
 }

@@ -31,8 +31,8 @@ public class MedicalScheduleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MedicalSheduleResponse> getOneMedicalSchedule(@PathVariable Long id, Authentication authentication){
-        return ResponseEntity.ok().body(medicalScheduleService.findById(id,authentication));
+    public ResponseEntity<MedicalSheduleResponse> getOneMedicalSchedule(@PathVariable Long id){
+        return ResponseEntity.ok().body(medicalScheduleService.findById(id));
     }
 
     @DeleteMapping("/{id}")

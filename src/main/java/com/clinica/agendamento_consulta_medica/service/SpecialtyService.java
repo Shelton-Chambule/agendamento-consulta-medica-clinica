@@ -43,15 +43,10 @@ public class SpecialtyService {
         return specialty.stream().map(SpecialtyResponse::new).collect(Collectors.toList());
     }
 
-    public SpecialtyResponse findById(Long id, Authentication authentication) {
-
-        Optional<Specialty> especialty = especialtyRepository.findById(id);
-
-        boolean admin = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_ADMIN"));
-
-        if(!admin) throw  new AccessDeniedException(" Access denied,  you don,t  authorization");
-
-        return new SpecialtyResponse(especialty.orElseThrow(() -> new ResourceNotFoundException(id)));
+    public SpecialtyResponse findById(Long id) {
+        Specialty specialty = especialtyRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(id));
+        return new SpecialtyResponse(specialty);
     }
 
     public void deleteById(Long id, Authentication authentication) {
@@ -60,12 +55,18 @@ public class SpecialtyService {
 
         boolean admin = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_ADMIN"));
 
-        if(!admin) throw new AccessDeniedException("Access denied!");
+        if(!admin) throw new AccessDeniedException("You do not have permission to delete specialties.");
 
         especialtyRepository.deleteById(id);
     }
 
-    public SpecialtyResponse update(Long id, SpecialtyRequest especialty) {
+    public SpecialtyResponse update(Long id, SpecialtyRequest especialty, Authentication authentication) {
+
+        boolean admin = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+        if (!admin) {
+            throw new AccessDeniedException("You do not have permission to update specialties.");
+        }
 
         try {
             Specialty especialty1 = especialtyRepository.getReferenceById(id);

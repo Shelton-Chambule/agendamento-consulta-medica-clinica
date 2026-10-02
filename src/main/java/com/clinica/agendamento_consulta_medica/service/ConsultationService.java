@@ -1,148 +1,182 @@
 package com.clinica.agendamento_consulta_medica.service;
+
 import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationRequest;
 import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationResponse;
 import com.clinica.agendamento_consulta_medica.entity.Consultation;
 import com.clinica.agendamento_consulta_medica.entity.Doctor;
 import com.clinica.agendamento_consulta_medica.entity.Patient;
 import com.clinica.agendamento_consulta_medica.entity.enums.StatusConsultation;
-import com.clinica.agendamento_consulta_medica.repository.ConsulationRepository;
-import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
-import com.clinica.agendamento_consulta_medica.repository.PatientRepository;
+import com.clinica.agendamento_consulta_medica.exception.AccessDeniedException;
 import com.clinica.agendamento_consulta_medica.exception.DataBaseException;
 import com.clinica.agendamento_consulta_medica.exception.ProcessConsultation;
 import com.clinica.agendamento_consulta_medica.exception.ResourceNotFoundException;
 import com.clinica.agendamento_consulta_medica.exception.ScheduleConflictException;
-import jakarta.persistence.EntityNotFoundException;
+import com.clinica.agendamento_consulta_medica.repository.ConsulationRepository;
+import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
+import com.clinica.agendamento_consulta_medica.repository.PatientRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ConsultationService {
 
-    private  final ConsulationRepository consulationRepository;
+    private final ConsulationRepository consultationRepository;
     private final DoctorRepository doctorRepository;
-    private final  PatientRepository patientRepository;
-    private  final  HistoryPatientService historyPatientService;
+    private final PatientRepository patientRepository;
+    private final HistoryPatientService historyPatientService;
 
-    public ConsultationService(ConsulationRepository consulationRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, HistoryPatientService historyPatientService) {
-        this.consulationRepository = consulationRepository;
+    public ConsultationService(ConsulationRepository consultationRepository, DoctorRepository doctorRepository,
+                               PatientRepository patientRepository, HistoryPatientService historyPatientService) {
+        this.consultationRepository = consultationRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
         this.historyPatientService = historyPatientService;
     }
 
-    public boolean hasScheduleConflict(Doctor doctor, LocalDate consultationDate, LocalTime startTime, LocalTime endTime) {
-
-        for (Consultation existing : doctor.getConsultations()) {
-
-            boolean sameDate = existing.getDate().equals(consultationDate);
-
-            if (!sameDate) {
-                continue;   // Mesmo horário em outro dia: permitido
-            }
-
-            LocalTime existingStart = existing.getStartTime();
-            LocalTime existingEnd = existingStart.plus(existing.getDuration());
-
-            boolean timeOverlaps = startTime.isBefore(existingEnd) && existingStart.isBefore(endTime);
-
-            if (timeOverlaps) {
-                return true;  // Mesmo médico, mesma data e horários sobrepostos
-            }
-        }
-        return false;
-    }
     @Transactional
-    public ConsultationResponse save(ConsultationRequest consultationDto) {
+    public ConsultationResponse save(ConsultationRequest request, Authentication authentication) {
+        validateDuration(request.getDuration());
+        Doctor doctor = doctorRepository.findById(request.getDoctor())
+                .orElseThrow(() -> new ResourceNotFoundException(request.getDoctor()));
+        Patient patient = patientRepository.findById(request.getPatient())
+                .orElseThrow(() -> new ResourceNotFoundException(request.getPatient()));
+        ensurePatientOwnerOrAdmin(patient, authentication);
 
-        Doctor doctor = doctorRepository.findById(consultationDto.getDoctor()).orElseThrow(() -> new ResourceNotFoundException(consultationDto.getDoctor()));
-        Patient patient = patientRepository.findById(consultationDto.getPatient()).orElseThrow(() -> new ResourceNotFoundException(consultationDto.getPatient()));
-
-        LocalDate consultationDate = consultationDto.getDate();
-        LocalTime starTime = consultationDto.getStartTime();
-        LocalTime endTime = starTime.plus(consultationDto.getDuration());
-
-        if(hasScheduleConflict(doctor,consultationDate,starTime, endTime)) throw new ScheduleConflictException("The doctor already has an appointment scheduled for that time");
+        if (hasScheduleConflict(doctor, request.getDate(), request.getStartTime(), request.getDuration(), null)) {
+            throw new ScheduleConflictException("The doctor already has an appointment scheduled for this time.");
+        }
 
         Consultation consultation = new Consultation();
-
-        consultation.setMoment(LocalDateTime.now());
-        consultation.setDate(consultationDate);
-        consultation.setDuration(consultationDto.getDuration());
-        consultation.setStartTime(starTime);
+        consultation.setDate(request.getDate());
+        consultation.setDuration(request.getDuration());
+        consultation.setStartTime(request.getStartTime());
         consultation.setDoctor(doctor);
         consultation.setPatient(patient);
         consultation.setStatusConsultation(StatusConsultation.WAITING);
-        consulationRepository.save(consultation);
 
-        historyPatientService.save(consultation);
+        Consultation saved = consultationRepository.save(consultation);
+        historyPatientService.save(saved);
+        return new ConsultationResponse(saved);
+    }
 
+    @Transactional
+    public ConsultationResponse processConsultation(Long id, Authentication authentication) {
+        Consultation consultation = getConsultation(id);
+        ensureDoctorOwnerOrAdmin(consultation, authentication);
+
+        if (consultation.getStatusConsultation() != StatusConsultation.WAITING) {
+            throw new ProcessConsultation("Only consultations in WAITING status can be processed.");
+        }
+
+        consultation.setStatusConsultation(StatusConsultation.CARRIED_OUT);
+        Consultation saved = consultationRepository.save(consultation);
+        historyPatientService.updateStatus(saved);
+        return new ConsultationResponse(saved);
+    }
+
+    public List<ConsultationResponse> findAll() {
+        return consultationRepository.findAll().stream().map(ConsultationResponse::new).toList();
+    }
+
+    public ConsultationResponse findById(Long id, Authentication authentication) {
+        Consultation consultation = getConsultation(id);
+        ensureParticipantOrAdmin(consultation, authentication);
         return new ConsultationResponse(consultation);
     }
 
     @Transactional
-    public ConsultationResponse processConsultation(Long consultationId) {
-
-        Consultation consultation = consulationRepository.findById(consultationId).orElseThrow(() -> new ResourceNotFoundException(consultationId));
-
-        if (consultation.getStatusConsultation() != StatusConsultation.WAITING)
-            throw new ProcessConsultation("The query can only be processed when it is in the WAITING state..");
-
-        consultation.setStatusConsultation(StatusConsultation.CARRIED_OUT);
-        consultation.setMoment(LocalDateTime.now());
-
-        Consultation savedConsultation = consulationRepository.save(consultation);
-        historyPatientService.updateStatus(consultation);
-        return new ConsultationResponse(savedConsultation);
-    }
-
-    public List<ConsultationResponse> findAll() {
-        List<Consultation> consultation = consulationRepository.findAll();
-        return consultation.stream().map(ConsultationResponse::new).collect(Collectors.toList());
-    }
-
-    public ConsultationResponse findById(Long id) {
-        Optional<Consultation> consultation = consulationRepository.findById(id);
-        return new ConsultationResponse(consultation.orElseThrow(() -> new ResourceNotFoundException(id)));
-    }
-
-    public void deleteById(Long id) {
-        if (!consulationRepository.existsById(id)) throw new ResourceNotFoundException(id);
+    public void deleteById(Long id, Authentication authentication) {
+        Consultation consultation = getConsultation(id);
+        ensurePatientOwnerOrAdmin(consultation.getPatient(), authentication);
+        ensureWaiting(consultation);
 
         try {
-            consulationRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new ResourceNotFoundException(id);
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new DataBaseException(e.getMessage());
+            consultationRepository.delete(consultation);
+            consultationRepository.flush();
+        } catch (DataIntegrityViolationException exception) {
+            throw new DataBaseException("The consultation cannot be deleted because it is referenced by other records.");
         }
     }
 
-    public ConsultationResponse update(Long id, ConsultationRequest consultationRequestDTO) {
-        try {
-            Consultation consultation = consulationRepository.getReferenceById(id);
-            updateData(consultation, consultationRequestDTO);
-            consulationRepository.save(consultation);
-            return new ConsultationResponse(consultation);
-        } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException(id);
+    @Transactional
+    public ConsultationResponse update(Long id, ConsultationRequest request, Authentication authentication) {
+        validateDuration(request.getDuration());
+        Consultation consultation = getConsultation(id);
+        ensurePatientOwnerOrAdmin(consultation.getPatient(), authentication);
+        ensureWaiting(consultation);
+
+        Doctor doctor = doctorRepository.findById(request.getDoctor())
+                .orElseThrow(() -> new ResourceNotFoundException(request.getDoctor()));
+        if (hasScheduleConflict(doctor, request.getDate(), request.getStartTime(), request.getDuration(), consultation.getId())) {
+            throw new ScheduleConflictException("The doctor already has an appointment scheduled for this time.");
         }
-    }
 
-    private void updateData(Consultation consultation, ConsultationRequest consultationRequestDTO) {
-
-        Doctor doctor = doctorRepository.findById(consultationRequestDTO.getDoctor()).orElseThrow(() -> new ResourceNotFoundException(consultationRequestDTO.getDoctor()));
-
-        consultation.setStartTime(consultationRequestDTO.getStartTime());
-        consultation.setDuration(consultationRequestDTO.getDuration());
+        consultation.setDate(request.getDate());
+        consultation.setStartTime(request.getStartTime());
+        consultation.setDuration(request.getDuration());
         consultation.setDoctor(doctor);
+        return new ConsultationResponse(consultationRepository.save(consultation));
+    }
+
+    private boolean hasScheduleConflict(Doctor doctor, LocalDate date, LocalTime startTime,
+                                        Duration duration, Long excludedConsultationId) {
+        LocalTime endTime = startTime.plus(duration);
+        return doctor.getConsultations().stream()
+                .filter(existing -> !existing.getId().equals(excludedConsultationId))
+                .filter(existing -> existing.getDate().equals(date))
+                .anyMatch(existing -> startTime.isBefore(existing.getStartTime().plus(existing.getDuration()))
+                        && existing.getStartTime().isBefore(endTime));
+    }
+
+    private Consultation getConsultation(Long id) {
+        return consultationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+    }
+
+    private void validateDuration(Duration duration) {
+        if (duration.isZero() || duration.isNegative()) {
+            throw new IllegalArgumentException("Consultation duration must be greater than zero.");
+        }
+    }
+
+    private void ensureWaiting(Consultation consultation) {
+        if (consultation.getStatusConsultation() != StatusConsultation.WAITING) {
+            throw new ProcessConsultation("Only consultations in WAITING status can be changed or cancelled.");
+        }
+    }
+
+    private void ensureParticipantOrAdmin(Consultation consultation, Authentication authentication) {
+        if (isAdmin(authentication)
+                || consultation.getPatient().getAccount().getLogin().equals(authentication.getName())
+                || consultation.getDoctor().getAccount().getLogin().equals(authentication.getName())) {
+            return;
+        }
+        throw new AccessDeniedException("You do not have permission to access this consultation.");
+    }
+
+    private void ensurePatientOwnerOrAdmin(Patient patient, Authentication authentication) {
+        if (isAdmin(authentication) || patient.getAccount().getLogin().equals(authentication.getName())) {
+            return;
+        }
+        throw new AccessDeniedException("You do not have permission to manage this patient's consultations.");
+    }
+
+    private void ensureDoctorOwnerOrAdmin(Consultation consultation, Authentication authentication) {
+        if (isAdmin(authentication)
+                || consultation.getDoctor().getAccount().getLogin().equals(authentication.getName())) {
+            return;
+        }
+        throw new AccessDeniedException("You do not have permission to process this consultation.");
+    }
+
+    private boolean isAdmin(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
     }
 }

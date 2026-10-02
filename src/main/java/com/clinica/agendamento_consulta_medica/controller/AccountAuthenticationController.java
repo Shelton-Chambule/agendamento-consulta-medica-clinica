@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.nio.file.AccessDeniedException;
 
 @RestController
 @RequestMapping("/authentications")
@@ -39,7 +38,7 @@ public class AccountAuthenticationController {
     }
 
     @PostMapping("/register/admin")
-    public  ResponseEntity<AccountAdminResponse> createAccountAdmin(@Valid @RequestBody  AccountAdminRequest request, Authentication authentication) throws AccessDeniedException {
+    public  ResponseEntity<AccountAdminResponse> createAccountAdmin(@Valid @RequestBody  AccountAdminRequest request, Authentication authentication) {
         return ResponseEntity.status(HttpStatus.CREATED).body(accountService.createAccountAdmin(request,authentication));
     }
 

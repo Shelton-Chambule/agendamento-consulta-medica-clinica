@@ -15,14 +15,14 @@ public class AccountAdminRequest {
 
     @NotBlank
     @JsonProperty(required = true)
-    @Email(message = "format email invalid")
+    @Email(message = "Login must be a valid email address.")
     private String login;
 
     @NotBlank
     @JsonProperty(required = true)
     @Pattern(
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,}$",
-            message = "The password must contain an uppercase letter, a lowercase letter, a number, and a special character."
+            message = "Password must contain uppercase and lowercase letters, a number, and a special character."
     )
     private String password;
 

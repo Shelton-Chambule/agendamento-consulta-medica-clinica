@@ -7,8 +7,7 @@ import com.clinica.agendamento_consulta_medica.entity.Account;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class TokenService {
@@ -26,7 +25,7 @@ public class TokenService {
                     .sign(algorithm);
             return token;
         }catch (JWTCreationException exception){
-            throw new RuntimeException("Error, while generate token"+ exception);
+            throw new IllegalStateException("Unable to generate the authentication token.", exception);
         }
     }
 
@@ -40,11 +39,11 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         }catch (JWTVerificationException exception){
-            return "";
+            return null;
         }
     }
 
     public Instant expireToken(){
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+        return Instant.now().plus(2, ChronoUnit.HOURS);
     }
 }

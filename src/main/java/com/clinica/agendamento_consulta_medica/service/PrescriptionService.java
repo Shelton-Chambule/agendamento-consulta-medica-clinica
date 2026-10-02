@@ -1,110 +1,118 @@
 package com.clinica.agendamento_consulta_medica.service;
+
 import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionRequest;
 import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionResponse;
 import com.clinica.agendamento_consulta_medica.entity.Consultation;
 import com.clinica.agendamento_consulta_medica.entity.Prescription;
 import com.clinica.agendamento_consulta_medica.entity.enums.StatusConsultation;
 import com.clinica.agendamento_consulta_medica.exception.AccessDeniedException;
-import com.clinica.agendamento_consulta_medica.repository.ConsulationRepository;
-import com.clinica.agendamento_consulta_medica.repository.PrescriptionRepository;
 import com.clinica.agendamento_consulta_medica.exception.ResourceNotFoundException;
 import com.clinica.agendamento_consulta_medica.exception.ValidateStatusConsultation;
-import jakarta.persistence.EntityNotFoundException;
+import com.clinica.agendamento_consulta_medica.repository.ConsulationRepository;
+import com.clinica.agendamento_consulta_medica.repository.PrescriptionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PrescriptionService {
 
     private final PrescriptionRepository prescriptionRepository;
-    private final ConsulationRepository consulationRepository;
+    private final ConsulationRepository consultationRepository;
 
-    public PrescriptionService(PrescriptionRepository prescriptionRepository, ConsulationRepository consulationRepository) {
+    public PrescriptionService(PrescriptionRepository prescriptionRepository, ConsulationRepository consultationRepository) {
         this.prescriptionRepository = prescriptionRepository;
-        this.consulationRepository = consulationRepository;
-
+        this.consultationRepository = consultationRepository;
     }
 
-    public PrescriptionResponse save(PrescriptionRequest prescriptionRequestDTO, Authentication authentication) {
-
-        Consultation consultation = consulationRepository.findById(prescriptionRequestDTO.getConsultationId()).orElseThrow(() -> new ResourceNotFoundException(prescriptionRequestDTO.getConsultationId()));
-
-        if(!consultation.getStatusConsultation().equals(StatusConsultation.CARRIED_OUT)) throw new ValidateStatusConsultation("Erro creating of prescription, verify id  of consultation");
-
-        boolean doctor = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_DOCTOR"));
-
-        if(!doctor) throw new AccessDeniedException("Access denied");
+    @Transactional
+    public PrescriptionResponse save(PrescriptionRequest request, Authentication authentication) {
+        Consultation consultation = getConsultation(request.getConsultationId());
+        ensureCarriedOut(consultation);
+        ensureDoctorOwnerOrAdmin(consultation, authentication);
 
         Prescription prescription = new Prescription();
-
-        prescription.setDosage(prescriptionRequestDTO.getDosage());
-        prescription.setFrequency(prescriptionRequestDTO.getFrequency());
-        prescription.setMedications(prescriptionRequestDTO.getMedications());
-        prescription.setObservations(prescriptionRequestDTO.getObservations());
+        prescription.setDosage(request.getDosage());
+        prescription.setFrequency(request.getFrequency());
+        prescription.setMedications(request.getMedications());
+        prescription.setObservations(request.getObservations());
         prescription.setConsultation(consultation);
         prescription.setDate(LocalDate.now());
-        prescriptionRepository.save(prescription);
-        return new PrescriptionResponse(prescription);
-
+        return new PrescriptionResponse(prescriptionRepository.save(prescription));
     }
 
     public List<PrescriptionResponse> findAll() {
-        List<Prescription> prescriptions = prescriptionRepository.findAll();
-        return prescriptions.stream().map(PrescriptionResponse::new).collect(Collectors.toList());
+        return prescriptionRepository.findAll().stream().map(PrescriptionResponse::new).toList();
     }
 
     public PrescriptionResponse findById(Long id, Authentication authentication) {
-
-        Optional<Prescription> prescription = prescriptionRepository.findById(id);
-
-        boolean doctor = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_DOCTOR"));
-
-        if(!doctor) throw new AccessDeniedException("Access denied");
-
-        return new PrescriptionResponse(prescription.orElseThrow(() -> new ResourceNotFoundException(id)));
+        Prescription prescription = getPrescription(id);
+        ensureParticipantOrAdmin(prescription, authentication);
+        return new PrescriptionResponse(prescription);
     }
 
-    public void deleteById(Long id,Authentication authentication) {
-
-        prescriptionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-
-        boolean doctor = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_DOCTOR"));
-        boolean admin = authentication.getAuthorities().stream().anyMatch((any -> any.getAuthority().equals("ROLE_ADMIN")));
-
-        if(!doctor && !admin) throw new AccessDeniedException("Access denied");
-
-        prescriptionRepository.deleteById(id);
+    @Transactional
+    public void deleteById(Long id, Authentication authentication) {
+        Prescription prescription = getPrescription(id);
+        ensureDoctorOwnerOrAdmin(prescription.getConsultation(), authentication);
+        prescriptionRepository.delete(prescription);
     }
 
-    public PrescriptionResponse update (Long id, PrescriptionRequest prescriptionDto , Authentication authentication) {
+    @Transactional
+    public PrescriptionResponse update(Long id, PrescriptionRequest request, Authentication authentication) {
+        Prescription prescription = getPrescription(id);
+        ensureDoctorOwnerOrAdmin(prescription.getConsultation(), authentication);
 
-        boolean doctor = authentication.getAuthorities().stream().anyMatch(any -> any.getAuthority().equals("ROLE_DOCTOR"));
-        boolean admin = authentication.getAuthorities().stream().anyMatch((any -> any.getAuthority().equals("ROLE_ADMIN")));
+        Consultation consultation = getConsultation(request.getConsultationId());
+        ensureCarriedOut(consultation);
+        ensureDoctorOwnerOrAdmin(consultation, authentication);
 
-        if(!doctor && !admin) throw new AccessDeniedException("Access denied");
+        prescription.setObservations(request.getObservations());
+        prescription.setDosage(request.getDosage());
+        prescription.setFrequency(request.getFrequency());
+        prescription.setMedications(request.getMedications());
+        prescription.setConsultation(consultation);
+        return new PrescriptionResponse(prescriptionRepository.save(prescription));
+    }
 
-        try {
-            Prescription prescription = prescriptionRepository.getReferenceById(id);
-            updateData(prescription, prescriptionDto);
-            prescriptionRepository.save(prescription);
-            return new PrescriptionResponse(prescription);
-        } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException(id);
+    private Prescription getPrescription(Long id) {
+        return prescriptionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+    }
+
+    private Consultation getConsultation(Long id) {
+        return consultationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+    }
+
+    private void ensureCarriedOut(Consultation consultation) {
+        if (consultation.getStatusConsultation() != StatusConsultation.CARRIED_OUT) {
+            throw new ValidateStatusConsultation(
+                    "A prescription can only be created for a completed consultation.");
         }
     }
 
-    private void updateData(Prescription prescription, PrescriptionRequest prescriptionDto) {
-        
-        Consultation consultation = consulationRepository.findById(prescriptionDto.getConsultationId()).orElseThrow(() -> new ResourceNotFoundException(prescriptionDto.getConsultationId()));
+    private void ensureParticipantOrAdmin(Prescription prescription, Authentication authentication) {
+        Consultation consultation = prescription.getConsultation();
+        if (isAdmin(authentication)
+                || consultation.getDoctor().getAccount().getLogin().equals(authentication.getName())
+                || consultation.getPatient().getAccount().getLogin().equals(authentication.getName())) {
+            return;
+        }
+        throw new AccessDeniedException("You do not have permission to access this prescription.");
+    }
 
-        prescription.setObservations(prescriptionDto.getObservations());
-        prescription.setDosage(prescription.getDosage());
-        prescription.setMedications(prescriptionDto.getMedications());
-        prescription.setDate(prescriptionDto.getDate());
-        prescription.setConsultation(consultation);
+    private void ensureDoctorOwnerOrAdmin(Consultation consultation, Authentication authentication) {
+        if (isAdmin(authentication)
+                || consultation.getDoctor().getAccount().getLogin().equals(authentication.getName())) {
+            return;
+        }
+        throw new AccessDeniedException("You do not have permission to manage this prescription.");
+    }
+
+    private boolean isAdmin(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
     }
 }

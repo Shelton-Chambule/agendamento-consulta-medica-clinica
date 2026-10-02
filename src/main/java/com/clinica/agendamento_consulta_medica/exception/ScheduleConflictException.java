@@ -4,6 +4,6 @@ public class ScheduleConflictException extends RuntimeException {
 
 
     public ScheduleConflictException(String message) {
-        super(" The doctor already has an appointment scheduled for that time.");
+        super(message);
     }
 }

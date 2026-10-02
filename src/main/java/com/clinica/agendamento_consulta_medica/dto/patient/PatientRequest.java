@@ -13,30 +13,30 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class PatientRequest {
 
-    @NotBlank(message = "Required field")
+    @NotBlank(message = "Name is required.")
     @JsonProperty(required = true)
     private String name;
 
-    @Email(message = "format email invalid")
-    @NotBlank
+    @Email(message = "Login must be a valid email address.")
+    @NotBlank(message = "Login is required.")
     @JsonProperty(required = true)
     private String login;
 
-    @NotBlank
+    @NotBlank(message = "Password is required.")
     @JsonProperty(required = true)
     @Pattern(
             regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,}$",
-            message = "The password must contain an uppercase letter, a lowercase letter, a number, and a special character."
+            message = "Password must contain uppercase and lowercase letters, a number, and a special character."
     )
     private String password;
 
-    @NotBlank(message = "Required field")
+    @NotBlank(message = "Phone number is required.")
     @Size(min = 9, max = 12)
     @JsonProperty(required = true)
     private String phone;
 
     @NotNull
-    @Past(message = "The date cannot future or present")
+    @Past(message = "Date of birth must be in the past.")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty(required = true)
     private LocalDate dataNascimento;

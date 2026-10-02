@@ -47,14 +47,16 @@ public class HistoryPatientService {
         try {
             historyPatientRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new DataBaseException(e.getMessage());
+            throw new DataBaseException("The consultation history cannot be deleted because it is referenced by other records.");
         }
     }
 
     @Transactional
     public void updateStatus(Consultation consultation) {
         HistoryPatient historyPatient = historyPatientRepository.findByConsultation_Id(consultation.getId());
-            if(!historyPatientRepository.existsById(consultation.getId())) throw new ResourceNotFoundException(consultation.getId());
+        if (historyPatient == null) {
+            throw new ResourceNotFoundException(consultation.getId());
+        }
 
         historyPatient.setStatusConsultation(consultation.getStatusConsultation());
 
