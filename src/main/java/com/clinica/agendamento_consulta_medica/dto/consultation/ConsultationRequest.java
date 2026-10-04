@@ -18,6 +18,7 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class ConsultationRequest {
 
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime moment;
 
     @JsonFormat(pattern ="yyyy-MM-dd")

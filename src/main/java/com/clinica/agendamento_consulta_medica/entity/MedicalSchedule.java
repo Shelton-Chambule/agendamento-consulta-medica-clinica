@@ -1,6 +1,5 @@
 package com.clinica.agendamento_consulta_medica.entity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.time.LocalTime;
 import java.util.*;
