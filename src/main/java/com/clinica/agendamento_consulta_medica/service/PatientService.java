@@ -1,5 +1,4 @@
 package com.clinica.agendamento_consulta_medica.service;
-
 import com.clinica.agendamento_consulta_medica.dto.patient.PatientRequest;
 import com.clinica.agendamento_consulta_medica.dto.patient.PatientResponse;
 import com.clinica.agendamento_consulta_medica.entity.Account;
@@ -12,26 +11,20 @@ import com.clinica.agendamento_consulta_medica.exception.UniqueLoginException;
 import com.clinica.agendamento_consulta_medica.repository.AccountRepository;
 import com.clinica.agendamento_consulta_medica.repository.PatientRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PatientService {
 
     private final PatientRepository patientRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccountRepository accountRepository;
-
-    public PatientService(PatientRepository patientRepository, PasswordEncoder passwordEncoder,
-                          AccountRepository accountRepository) {
-        this.patientRepository = patientRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.accountRepository = accountRepository;
-    }
 
     @Transactional
     public PatientResponse registerPatient(PatientRequest request) {
@@ -58,8 +51,7 @@ public class PatientService {
     }
 
     public PatientResponse findById(Long id, Authentication authentication) {
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
+        Patient patient = patientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
         ensureOwnerOrAdmin(patient, authentication);
         return new PatientResponse(patient);
     }
@@ -104,8 +96,6 @@ public class PatientService {
         boolean admin = authentication.getAuthorities().stream()
                 .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
         boolean owner = patient.getAccount().getLogin().equals(authentication.getName());
-        if (!admin && !owner) {
-            throw new AccessDeniedException("You do not have permission to access this patient.");
-        }
+        if (!admin && !owner) throw new AccessDeniedException("You do not have permission to access this patient.");
     }
 }

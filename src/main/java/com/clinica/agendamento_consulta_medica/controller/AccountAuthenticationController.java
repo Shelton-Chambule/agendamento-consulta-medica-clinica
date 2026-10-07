@@ -6,6 +6,7 @@ import com.clinica.agendamento_consulta_medica.entity.Account;
 import com.clinica.agendamento_consulta_medica.service.AccountService;
 import com.clinica.agendamento_consulta_medica.service.TokenService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,17 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/authentications")
+@RequiredArgsConstructor
 public class AccountAuthenticationController {
 
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
     private final AccountService accountService;
-
-    public AccountAuthenticationController(TokenService tokenService, AuthenticationManager authenticationManager, AccountService accountService) {
-        this.tokenService = tokenService;
-        this.authenticationManager = authenticationManager;
-        this.accountService = accountService;
-    }
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login (@Valid @RequestBody Account account){
