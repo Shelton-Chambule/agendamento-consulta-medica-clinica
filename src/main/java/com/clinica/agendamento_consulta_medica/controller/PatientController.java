@@ -3,6 +3,7 @@ import com.clinica.agendamento_consulta_medica.dto.patient.PatientRequest;
 import com.clinica.agendamento_consulta_medica.dto.patient.PatientResponse;
 import com.clinica.agendamento_consulta_medica.service.PatientService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

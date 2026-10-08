@@ -11,7 +11,6 @@ import com.clinica.agendamento_consulta_medica.exception.UniqueLoginException;
 import com.clinica.agendamento_consulta_medica.repository.AccountRepository;
 import com.clinica.agendamento_consulta_medica.repository.PatientRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,12 +18,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class PatientService {
 
     private final PatientRepository patientRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccountRepository accountRepository;
+
+    public PatientService(PatientRepository patientRepository, PasswordEncoder passwordEncoder, AccountRepository accountRepository) {
+        this.patientRepository = patientRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.accountRepository = accountRepository;
+    }
 
     @Transactional
     public PatientResponse registerPatient(PatientRequest request) {

@@ -11,10 +11,11 @@ import com.clinica.agendamento_consulta_medica.exception.DataBaseException;
 import com.clinica.agendamento_consulta_medica.exception.ProcessConsultation;
 import com.clinica.agendamento_consulta_medica.exception.ResourceNotFoundException;
 import com.clinica.agendamento_consulta_medica.exception.ScheduleConflictException;
-import com.clinica.agendamento_consulta_medica.repository.ConsulationRepository;
+import com.clinica.agendamento_consulta_medica.repository.ConsultationRepository;
 import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
 import com.clinica.agendamento_consulta_medica.repository.PatientRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -25,15 +26,15 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Service
+
 public class ConsultationService {
 
-    private final ConsulationRepository consultationRepository;
+    private final ConsultationRepository consultationRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
     private final HistoryPatientService historyPatientService;
 
-    public ConsultationService(ConsulationRepository consultationRepository, DoctorRepository doctorRepository,
-                               PatientRepository patientRepository, HistoryPatientService historyPatientService) {
+    public ConsultationService(ConsultationRepository consultationRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, HistoryPatientService historyPatientService) {
         this.consultationRepository = consultationRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
