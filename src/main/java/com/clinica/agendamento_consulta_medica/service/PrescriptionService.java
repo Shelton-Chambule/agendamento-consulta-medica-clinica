@@ -8,7 +8,7 @@ import com.clinica.agendamento_consulta_medica.entity.enums.StatusConsultation;
 import com.clinica.agendamento_consulta_medica.exception.AccessDeniedException;
 import com.clinica.agendamento_consulta_medica.exception.ResourceNotFoundException;
 import com.clinica.agendamento_consulta_medica.exception.ValidateStatusConsultation;
-import com.clinica.agendamento_consulta_medica.repository.ConsulationRepository;
+import com.clinica.agendamento_consulta_medica.repository.ConsultationRepository;
 import com.clinica.agendamento_consulta_medica.repository.PrescriptionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
@@ -21,9 +21,9 @@ import java.util.List;
 public class PrescriptionService {
 
     private final PrescriptionRepository prescriptionRepository;
-    private final ConsulationRepository consultationRepository;
+    private final ConsultationRepository consultationRepository;
 
-    public PrescriptionService(PrescriptionRepository prescriptionRepository, ConsulationRepository consultationRepository) {
+    public PrescriptionService(PrescriptionRepository prescriptionRepository, ConsultationRepository consultationRepository) {
         this.prescriptionRepository = prescriptionRepository;
         this.consultationRepository = consultationRepository;
     }

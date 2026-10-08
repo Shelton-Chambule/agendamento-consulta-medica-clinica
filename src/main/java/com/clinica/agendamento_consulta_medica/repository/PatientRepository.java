@@ -7,5 +7,4 @@ import java.util.Optional;
 @Repository
 public interface PatientRepository  extends JpaRepository<Patient, Long> {
 
-    void deleteById(Optional<Patient> patient);
 }
