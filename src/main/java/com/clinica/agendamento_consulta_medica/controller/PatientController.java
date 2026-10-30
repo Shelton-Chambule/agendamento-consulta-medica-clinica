@@ -3,7 +3,7 @@ import com.clinica.agendamento_consulta_medica.dto.patient.PatientRequest;
 import com.clinica.agendamento_consulta_medica.dto.patient.PatientResponse;
 import com.clinica.agendamento_consulta_medica.service.PatientService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/patients")
 public class PatientController {
@@ -23,28 +24,33 @@ public class PatientController {
 
     @PostMapping("/save")
     public ResponseEntity<PatientResponse> createPatient(@Valid  @RequestBody PatientRequest patientRequestDTO) {
+        log.info("Receiving request to create patient: {}", patientRequestDTO);
         PatientResponse patient = patientService.registerPatient(patientRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(patient);
     }
 
     @GetMapping("/getAllPatient")
     public ResponseEntity<List<PatientResponse>> getAllPatient() {
+        log.info("Receiving request to list all patients");
         return ResponseEntity.ok().body(patientService.findAll());
     }
 
     @GetMapping("/{patientId}")
     public ResponseEntity<PatientResponse> getOnePatient(@PathVariable Long patientId, Authentication authentication) {
+        log.info("Receiving request to fetch patient with id: {}", patientId);
         return ResponseEntity.ok().body(patientService.findById(patientId,authentication));
     }
 
     @DeleteMapping("/{patientId}")
     public ResponseEntity<Void> deleteOnePatient(@PathVariable Long patientId, Authentication authentication) {
+        log.info("Receiving request to delete patient with id: {}", patientId);
         patientService.deleteById(patientId,authentication);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{patientId}")
     public ResponseEntity<PatientResponse> updateOnePatient(@PathVariable Long patientId, @Valid @RequestBody PatientRequest patient,Authentication authentication) {
+        log.info("Receiving request to update patient with id: {}", patientId);
         return ResponseEntity.ok().body(patientService.update(patientId, patient,authentication));
     }
 }
