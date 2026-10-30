@@ -7,6 +7,7 @@ import com.clinica.agendamento_consulta_medica.service.AccountService;
 import com.clinica.agendamento_consulta_medica.service.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/authentications")
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class AccountAuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login (@Valid @RequestBody Account account){
+        log.info("Receiving login request for user: {}", account.getLogin());
         var authentication = authenticationManager.authenticate(new  UsernamePasswordAuthenticationToken(account.getLogin(), account.getPassword()));
         var token = tokenService.generatedToken( (Account) authentication.getPrincipal());
         return ResponseEntity.ok(new TokenResponse(token));
@@ -35,7 +38,7 @@ public class AccountAuthenticationController {
 
     @PostMapping("/register/admin")
     public  ResponseEntity<AccountAdminResponse> createAccountAdmin(@Valid @RequestBody  AccountAdminRequest request, Authentication authentication) {
+        log.info("Receiving request to create admin account: {}", request);
         return ResponseEntity.status(HttpStatus.CREATED).body(accountService.createAccountAdmin(request,authentication));
     }
-
 }

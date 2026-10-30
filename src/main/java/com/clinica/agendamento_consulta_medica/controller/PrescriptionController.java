@@ -3,12 +3,14 @@ import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionReque
 import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionResponse;
 import com.clinica.agendamento_consulta_medica.service.PrescriptionService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/prescriptions" )
 public class PrescriptionController {
@@ -21,30 +23,35 @@ public class PrescriptionController {
 
     @PostMapping("/create")
     public ResponseEntity<PrescriptionResponse> createPrescription(@Valid @RequestBody PrescriptionRequest prescriptionRequestDTO,
-                                                                    Authentication authentication){
+                                                                   Authentication authentication){
+        log.info("Receiving request to create prescription: {}", prescriptionRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(prescriptionService.save(prescriptionRequestDTO, authentication));
     }
 
     @GetMapping("/getAll")
     public ResponseEntity<List<PrescriptionResponse>> getAllPrescription(){
+        log.info("Receiving request to list all prescriptions");
         return ResponseEntity.ok().body(prescriptionService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PrescriptionResponse> getOnePrescription(@PathVariable Long id, Authentication authentication){
+        log.info("Receiving request to fetch prescription with id: {}", id);
         return ResponseEntity.status(HttpStatus.OK).body(prescriptionService.findById(id, authentication));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOnePrescription(@PathVariable Long id, Authentication authentication){
+        log.info("Receiving request to delete prescription with id: {}", id);
         prescriptionService.deleteById(id, authentication);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<PrescriptionResponse> updatePrescription(@PathVariable Long id,
-                                                                    @Valid @RequestBody PrescriptionRequest prescriptionDto,
-                                                                    Authentication authentication){
+                                                                   @Valid @RequestBody PrescriptionRequest prescriptionDto,
+                                                                   Authentication authentication){
+        log.info("Receiving request to update prescription with id: {}", id);
         return ResponseEntity.status(HttpStatus.OK).body(prescriptionService.update(id, prescriptionDto, authentication));
     }
 }
