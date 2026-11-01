@@ -23,8 +23,6 @@ public class HistoryPatientResponse {
 
     public HistoryPatientResponse(HistoryPatient historyPatient) {
         historyId = historyPatient.getId();
-        patientId =  historyPatient.getConsultation().getPatient().getPatientId();
-        namePatient = historyPatient.getConsultation().getPatient().getName();
         statTime = historyPatient.getConsultation().getStartTime();
         duration = historyPatient.getConsultation().getDuration();
         date = historyPatient.getConsultation().getDate();

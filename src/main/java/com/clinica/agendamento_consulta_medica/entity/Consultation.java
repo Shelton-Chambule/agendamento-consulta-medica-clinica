@@ -3,6 +3,7 @@ import com.clinica.agendamento_consulta_medica.entity.enums.StatusConsultation;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.io.Serializable;
 import java.time.Duration;
@@ -16,22 +17,27 @@ import java.util.Set;
 @Entity
 @Table(name = "tb_consultation")
 @EqualsAndHashCode(of = "id")
+@NoArgsConstructor
 public class Consultation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
+    @Column(name = "moment")
     private LocalDateTime moment;
 
-    @Column(nullable = false)
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @Column(nullable = false)
+    @Column(name = "start_time", nullable = false)
     private LocalTime startTime;
 
-    @Column(nullable = false)
+    @Column(name = "duration", nullable = false)
     private Duration duration;
+
+    @Column(name = "Consultation description", nullable = false)
+    private String consultationDescription;
 
     @OneToMany(mappedBy = "consultation")
     private Set<Prescription> revenue;
@@ -50,15 +56,14 @@ public class Consultation implements Serializable {
     @JoinColumn(name = "id_patient")
     private Patient patient;
 
-    public Consultation(){}
-
-    public Consultation(Long id, LocalDateTime moment, LocalDate date, LocalTime startTime, Duration duration, StatusConsultation statusConsultation) {
+    public Consultation(Long id, LocalDateTime moment, LocalDate date, LocalTime startTime, Duration duration, StatusConsultation statusConsultation, String  consultationDescription) {
         this.id = id;
         this.moment = moment;
         this.date = date;
         this.startTime = startTime;
         this.duration = duration;
         this.statusConsultation = statusConsultation;
+        this.consultationDescription = consultationDescription;
     }
 
     @PrePersist

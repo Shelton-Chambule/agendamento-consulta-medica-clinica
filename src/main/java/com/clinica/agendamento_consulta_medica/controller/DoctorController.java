@@ -4,11 +4,12 @@ import com.clinica.agendamento_consulta_medica.dto.doctor.DoctorResponse;
 import com.clinica.agendamento_consulta_medica.service.DoctorService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -28,9 +29,9 @@ public class DoctorController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<DoctorResponse>> getAllDoctor(){
+    public ResponseEntity<Page<DoctorResponse>> getAllDoctor(Pageable pageable){
         log.info("Receiving request to list all doctors");
-        return ResponseEntity.ok().body(doctorService.findAll());
+        return ResponseEntity.ok().body(doctorService.findAll(pageable));
     }
 
     @GetMapping("/{doctorId}")

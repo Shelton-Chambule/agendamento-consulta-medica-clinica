@@ -4,11 +4,12 @@ import com.clinica.agendamento_consulta_medica.dto.specialty.SpecialtyResponse;
 import com.clinica.agendamento_consulta_medica.service.SpecialtyService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -21,16 +22,10 @@ public class SpecialtyController {
         this.especialtyService = especialtyService;
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<SpecialtyResponse> save(@Valid @RequestBody SpecialtyRequest specialty){
-        log.info("Receiving request to save specialty: {}", specialty);
-        return ResponseEntity.status(HttpStatus.CREATED).body(especialtyService.save(specialty));
-    }
-
     @GetMapping("/getAll")
-    public ResponseEntity<List<SpecialtyResponse>> getAllSpecialty(){
+    public ResponseEntity<Page<SpecialtyResponse>> getAllSpecialty(Pageable pageable){
         log.info("Receiving request to list all specialties");
-        return ResponseEntity.ok().body(especialtyService.findAll());
+        return ResponseEntity.ok().body(especialtyService.findAll(pageable));
     }
 
     @GetMapping("/{specialtyId}")
