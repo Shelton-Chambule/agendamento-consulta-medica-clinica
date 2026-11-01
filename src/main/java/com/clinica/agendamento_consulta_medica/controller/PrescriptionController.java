@@ -4,11 +4,12 @@ import com.clinica.agendamento_consulta_medica.dto.prescrition.PrescriptionRespo
 import com.clinica.agendamento_consulta_medica.service.PrescriptionService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,9 +30,9 @@ public class PrescriptionController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<PrescriptionResponse>> getAllPrescription(){
+    public ResponseEntity<Page<PrescriptionResponse>> getAllPrescription(Pageable pageable){
         log.info("Receiving request to list all prescriptions");
-        return ResponseEntity.ok().body(prescriptionService.findAll());
+        return ResponseEntity.ok().body(prescriptionService.findAll(pageable));
     }
 
     @GetMapping("/{id}")

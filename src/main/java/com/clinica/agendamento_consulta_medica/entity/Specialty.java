@@ -24,7 +24,7 @@ public class Specialty {
    @JoinColumn(name = "id_doctor")
     private Doctor doctors;
 
-    public Specialty(Long id, String name, Double price) {
+    public Specialty(Long id, String name) {
         this.id = id;
         this.name = name;
     }

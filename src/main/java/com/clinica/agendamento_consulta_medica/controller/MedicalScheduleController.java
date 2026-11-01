@@ -4,11 +4,12 @@ import com.clinica.agendamento_consulta_medica.dto.medicalShedule.MedicalShedule
 import com.clinica.agendamento_consulta_medica.service.MedicalScheduleService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -29,9 +30,9 @@ public class MedicalScheduleController {
     }
 
     @GetMapping("/findAll")
-    public ResponseEntity<List<MedicalSheduleResponse>> getAllMedicalSchedule(){
+    public ResponseEntity<Page<MedicalSheduleResponse>> getAllMedicalSchedule(Pageable pageable){
         log.info("Receiving request to list all medical schedules");
-        return ResponseEntity.ok().body( medicalScheduleService.findAll());
+        return ResponseEntity.ok().body( medicalScheduleService.findAll(pageable));
     }
 
     @GetMapping("/{id}")

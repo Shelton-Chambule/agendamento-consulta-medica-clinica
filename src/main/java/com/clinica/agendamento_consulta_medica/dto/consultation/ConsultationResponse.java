@@ -23,7 +23,6 @@ public class ConsultationResponse {
     private Long doctor;
     private StatusConsultation statusConsultation;
 
-
     public ConsultationResponse(Consultation consultation) {
         Id = consultation.getId();
         this.moment  = consultation.getMoment();

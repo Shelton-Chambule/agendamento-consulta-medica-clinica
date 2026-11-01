@@ -1,15 +1,16 @@
 package com.clinica.agendamento_consulta_medica.controller;
 import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationRequest;
 import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationResponse;
+import com.clinica.agendamento_consulta_medica.entity.Account;
 import com.clinica.agendamento_consulta_medica.service.ConsultationService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -23,10 +24,9 @@ public class ConsultationController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<ConsultationResponse>  createConsultation(@Valid @RequestBody ConsultationRequest consultation,
-                                                                    Authentication authentication){
+    public ResponseEntity<ConsultationResponse>  createConsultation(@Valid @RequestBody ConsultationRequest consultation){
         log.info("Receiving request to create consultation: {}", consultation);
-        return ResponseEntity.status(HttpStatus.CREATED).body(consultationService.save(consultation, authentication));
+        return ResponseEntity.status(HttpStatus.CREATED).body(consultationService.save(consultation));
     }
 
     @PostMapping("/{consultationId}/process")
@@ -37,9 +37,9 @@ public class ConsultationController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<ConsultationResponse>> getAllConsultation(){
+    public ResponseEntity<Page<ConsultationResponse>> getAllConsultation(Pageable pageable){
         log.info("Receiving request to list all consultations");
-        return ResponseEntity.ok().body(consultationService.findAll());
+        return ResponseEntity.ok().body(consultationService.findAll(pageable));
     }
 
     @GetMapping("/{consultationId}")

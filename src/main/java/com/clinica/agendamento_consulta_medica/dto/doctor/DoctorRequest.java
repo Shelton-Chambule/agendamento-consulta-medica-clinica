@@ -1,5 +1,6 @@
 package com.clinica.agendamento_consulta_medica.dto.doctor;
 import com.clinica.agendamento_consulta_medica.entity.Doctor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DoctorRequest {
 
-    @NotBlank(message = "Name is required.")
+    @NotBlank(message = "Name is required")
     private String name;
 
     @Email(message = "Login must be a valid email address.")
@@ -29,11 +30,16 @@ public class DoctorRequest {
     @Size(min = 9, max = 12)
     private String phone;
 
+    @NotBlank(message = "name in the specialty is required")
+    @JsonProperty(required = true)
+    private String nameSpecialty;
+
     public DoctorRequest(Doctor doctor) {
         name = doctor.getName();
         phone = doctor.getPhone();
         login = doctor.getAccount().getLogin();
         password = doctor.getAccount().getPassword();
+        nameSpecialty = doctor.getSpecialties().getFirst().getName();
     }
 
 }
