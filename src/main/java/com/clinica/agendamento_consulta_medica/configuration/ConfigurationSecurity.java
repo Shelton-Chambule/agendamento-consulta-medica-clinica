@@ -61,6 +61,10 @@ public class ConfigurationSecurity{
                         .requestMatchers(HttpMethod.PUT, "/prescriptions/{id}").hasAnyRole("ADMIN", "DOCTOR")
                         .requestMatchers(HttpMethod.DELETE, "/prescriptions/{id}").hasAnyRole("ADMIN", "DOCTOR")
                         .requestMatchers(HttpMethod.GET, "/prescriptions/**").hasAnyRole("ADMIN", "DOCTOR", "PATIENT")
+                        .requestMatchers(HttpMethod.POST, "/process/{consultationId}/waiting").hasAnyRole("ADMIN", "DOCTOR")
+                        .requestMatchers(HttpMethod.POST, "/process/{consultationId}/confirmed").hasAnyRole("ADMIN", "DOCTOR")
+                        .requestMatchers(HttpMethod.POST, "/process/{consultationId}/scheduled").hasAnyRole("ADMIN", "DOCTOR")
+                        .requestMatchers(HttpMethod.POST, "/process/{consultationId}/canceled").hasAnyRole("ADMIN", "DOCTOR")
                         .anyRequest().denyAll()).
                 addFilterBefore(securityFilter,  UsernamePasswordAuthenticationFilter.class).build();
     }

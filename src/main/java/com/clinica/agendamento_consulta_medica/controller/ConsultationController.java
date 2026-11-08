@@ -29,13 +29,6 @@ public class ConsultationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(consultationService.save(consultation));
     }
 
-    @PostMapping("/{consultationId}/process")
-    public ResponseEntity<ConsultationResponse> processConsultation(@PathVariable Long consultationId,
-                                                                    Authentication authentication){
-        log.info("Receiving request to process consultation with id: {}", consultationId);
-        return ResponseEntity.ok().body(consultationService.processConsultation(consultationId, authentication));
-    }
-
     @GetMapping("/getAll")
     public ResponseEntity<Page<ConsultationResponse>> getAllConsultation(Pageable pageable){
         log.info("Receiving request to list all consultations");

@@ -31,10 +31,10 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class ConsultationService {
 
-    private final ConsultationRepository consultationRepository;
+    protected final ConsultationRepository consultationRepository;
     private final DoctorRepository doctorRepository;
-    private final HistoryPatientService historyPatientService;
-    private final ConsultationMapper consultationMapper;
+    protected final HistoryPatientService historyPatientService;
+    protected final ConsultationMapper consultationMapper;
     private final CurrentUserService currentUserService;
 
     @Transactional
@@ -74,24 +74,6 @@ public class ConsultationService {
         Consultation saved = consultationRepository.save(consultation);
         historyPatientService.save(saved);
         log.info("Consultation saved successfully with id: {}", saved.getId());
-        return consultationMapper.toResponse(saved);
-    }
-
-    @Transactional
-    public ConsultationResponse processConsultation(Long id, Authentication authentication) {
-        log.info("Processing consultation with id: {}", id);
-        Consultation consultation = getConsultation(id);
-        ensureDoctorOwnerOrAdmin(consultation, authentication);
-
-        if (consultation.getStatusConsultation() != StatusConsultation.WAITING) {
-            log.warn("Consultation id {} is not in WAITING status and cannot be processed.", id);
-            throw new ProcessConsultation("Only consultations in WAITING status can be processed.");
-        }
-
-        consultation.setStatusConsultation(StatusConsultation.CARRIED_OUT);
-        Consultation saved = consultationRepository.save(consultation);
-        historyPatientService.updateStatus(saved);
-        log.info("Consultation id {} processed successfully.", id);
         return consultationMapper.toResponse(saved);
     }
 
@@ -152,6 +134,7 @@ public class ConsultationService {
         return consultationMapper.toResponse(saved);
     }
 
+
     private boolean hasScheduleConflict(Doctor doctor, LocalDate date, LocalTime startTime,
                                         Duration duration, Long excludedConsultationId) {
         LocalTime endTime = startTime.plus(duration);
@@ -162,7 +145,7 @@ public class ConsultationService {
                         && existing.getStartTime().isBefore(endTime));
     }
 
-    private Consultation getConsultation(Long id) {
+    protected Consultation getConsultation(Long id) {
         return consultationRepository.findById(id).orElseThrow(() -> {
             log.warn("Consultation not found with id: {}", id);
             return new ResourceNotFoundException(id);
@@ -199,9 +182,8 @@ public class ConsultationService {
         throw new AccessDeniedException("You do not have permission to manage this patient's consultations.");
     }
 
-    private void ensureDoctorOwnerOrAdmin(Consultation consultation, Authentication authentication) {
-        if (isAdmin(authentication)
-                || consultation.getDoctor().getAccount().getLogin().equals(authentication.getName())) {
+    protected void ensureDoctorOwnerOrAdmin(Consultation consultation, Authentication authentication) {
+        if (isAdmin(authentication) || consultation.getDoctor().getAccount().getLogin().equals(authentication.getName())) {
             return;
         }
         log.warn("User '{}' denied processing of consultation id {}", authentication.getName(), consultation.getId());
