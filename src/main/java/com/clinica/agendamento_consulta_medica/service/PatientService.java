@@ -11,7 +11,7 @@ import com.clinica.agendamento_consulta_medica.exception.UniqueLoginException;
 import com.clinica.agendamento_consulta_medica.mapper.PatientMapper;
 import com.clinica.agendamento_consulta_medica.repository.AccountRepository;
 import com.clinica.agendamento_consulta_medica.repository.PatientRepository;
-import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -19,9 +19,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class PatientService {
 
     private final PatientRepository patientRepository;
@@ -29,13 +31,6 @@ public class PatientService {
     private final AccountRepository accountRepository;
     private final PatientMapper patientMapper;
 
-    public PatientService(PatientRepository patientRepository, PasswordEncoder passwordEncoder,
-                          AccountRepository accountRepository, PatientMapper patientMapper) {
-        this.patientRepository = patientRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.accountRepository = accountRepository;
-        this.patientMapper = patientMapper;
-    }
 
     @Transactional
     public PatientResponse registerPatient(PatientRequest request) {
@@ -77,8 +72,8 @@ public class PatientService {
         return patientMapper.toResponse(patient);
     }
 
-    @Transactional
-    public PatientResponse update(Long id, PatientRequest request, Authentication authentication) {
+   @Transactional
+    public PatientResponse updatePatient(Long id, PatientRequest request, Authentication authentication) {
         log.info("Updating patient with id: {}", id);
         Patient patient = patientRepository.findById(id)
                 .orElseThrow(() -> {

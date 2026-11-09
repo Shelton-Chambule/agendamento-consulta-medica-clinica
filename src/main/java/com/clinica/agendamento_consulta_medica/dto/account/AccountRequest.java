@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class AccountAdminRequest {
+public class AccountRequest {
 
     @NotBlank
     @JsonProperty(required = true)
@@ -20,12 +20,10 @@ public class AccountAdminRequest {
 
     @NotBlank
     @JsonProperty(required = true)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,}$",
-            message = "Password must contain uppercase and lowercase letters, a number, and a special character."
-    )
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d]).{8,}$", message = "Password must contain uppercase and lowercase letters, a number, and a special character.")
     private String password;
 
-    public AccountAdminRequest(Account account) {
+    public AccountRequest(Account account) {
         this.login = account.getLogin();
         this.password = account.getPassword();
     }

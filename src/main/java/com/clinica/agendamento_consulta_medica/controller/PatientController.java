@@ -51,6 +51,6 @@ public class PatientController {
     @PutMapping("/{patientId}")
     public ResponseEntity<PatientResponse> updateOnePatient(@PathVariable Long patientId, @Valid @RequestBody PatientRequest patient,Authentication authentication) {
         log.info("Receiving request to update patient with id: {}", patientId);
-        return ResponseEntity.ok().body(patientService.update(patientId, patient,authentication));
+        return ResponseEntity.ok().body(patientService.updatePatient(patientId, patient,authentication));
     }
 }

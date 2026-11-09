@@ -1,4 +1,5 @@
 package com.clinica.agendamento_consulta_medica.service;
+
 import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationRequest;
 import com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationResponse;
 import com.clinica.agendamento_consulta_medica.entity.Account;
@@ -14,7 +15,6 @@ import com.clinica.agendamento_consulta_medica.exception.ScheduleConflictExcepti
 import com.clinica.agendamento_consulta_medica.mapper.ConsultationMapper;
 import com.clinica.agendamento_consulta_medica.repository.ConsultationRepository;
 import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,6 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -38,7 +40,7 @@ public class ConsultationService {
     private final CurrentUserService currentUserService;
 
     @Transactional
-    public ConsultationResponse save(ConsultationRequest request) {
+    public ConsultationResponse createConsultation(ConsultationRequest request) {
 
         Account account = currentUserService.getCurrentUser();
         Patient patient = account.getPatient();
@@ -51,11 +53,10 @@ public class ConsultationService {
         log.info("Saving consultation for doctor id {} and patient id {}", request.getDoctor(), patient.getPatientId());
         validateDuration(request.getDuration());
 
-        Doctor doctor = doctorRepository.findById(request.getDoctor())
-                .orElseThrow(() -> {
-                    log.warn("Doctor not found with id: {}", request.getDoctor());
-                    return new ResourceNotFoundException(request.getDoctor());
-                });
+        Doctor doctor = doctorRepository.findByIdWithLock(request.getDoctor()).orElseThrow(() -> {
+            log.warn("Doctor not found with id: {}", request.getDoctor());
+            return new ResourceNotFoundException(request.getDoctor());
+        });
 
         if (hasScheduleConflict(doctor, request.getDate(), request.getStartTime(), request.getDuration(), null)) {
             log.warn("Schedule conflict detected for doctor id {} on {} at {}", doctor.getDoctorId(), request.getDate(), request.getStartTime());
@@ -108,18 +109,17 @@ public class ConsultationService {
     }
 
     @Transactional
-    public ConsultationResponse update(Long id, ConsultationRequest request, Authentication authentication) {
+    public ConsultationResponse updateConsultation(Long id, ConsultationRequest request, Authentication authentication) {
         log.info("Updating consultation with id: {}", id);
         validateDuration(request.getDuration());
         Consultation consultation = getConsultation(id);
         ensurePatientOwnerOrAdmin(consultation.getPatient(), authentication);
         ensureWaiting(consultation);
 
-        Doctor doctor = doctorRepository.findById(request.getDoctor())
-                .orElseThrow(() -> {
-                    log.warn("Doctor not found with id: {}", request.getDoctor());
-                    return new ResourceNotFoundException(request.getDoctor());
-                });
+        Doctor doctor = doctorRepository.findByIdWithLock(request.getDoctor()).orElseThrow(() -> {
+            log.warn("Doctor not found with id: {}", request.getDoctor());
+            return new ResourceNotFoundException(request.getDoctor());
+        });
         if (hasScheduleConflict(doctor, request.getDate(), request.getStartTime(), request.getDuration(), consultation.getId())) {
             log.warn("Schedule conflict detected while updating consultation id {}", id);
             throw new ScheduleConflictException("The doctor already has an appointment scheduled for this time.");
@@ -135,14 +135,9 @@ public class ConsultationService {
     }
 
 
-    private boolean hasScheduleConflict(Doctor doctor, LocalDate date, LocalTime startTime,
-                                        Duration duration, Long excludedConsultationId) {
+    private boolean hasScheduleConflict(Doctor doctor, LocalDate date, LocalTime startTime, Duration duration, Long excludedConsultationId) {
         LocalTime endTime = startTime.plus(duration);
-        return doctor.getConsultations().stream()
-                .filter(existing -> !existing.getId().equals(excludedConsultationId))
-                .filter(existing -> existing.getDate().equals(date))
-                .anyMatch(existing -> startTime.isBefore(existing.getStartTime().plus(existing.getDuration()))
-                        && existing.getStartTime().isBefore(endTime));
+        return doctor.getConsultations().stream().filter(existing -> !existing.getId().equals(excludedConsultationId)).filter(existing -> existing.getDate().equals(date)).anyMatch(existing -> startTime.isBefore(existing.getStartTime().plus(existing.getDuration())) && existing.getStartTime().isBefore(endTime));
     }
 
     protected Consultation getConsultation(Long id) {
@@ -165,9 +160,7 @@ public class ConsultationService {
     }
 
     private void ensureParticipantOrAdmin(Consultation consultation, Authentication authentication) {
-        if (isAdmin(authentication)
-                || consultation.getPatient().getAccount().getLogin().equals(authentication.getName())
-                || consultation.getDoctor().getAccount().getLogin().equals(authentication.getName())) {
+        if (isAdmin(authentication) || consultation.getPatient().getAccount().getLogin().equals(authentication.getName()) || consultation.getDoctor().getAccount().getLogin().equals(authentication.getName())) {
             return;
         }
         log.warn("User '{}' denied access to consultation id {}", authentication.getName(), consultation.getId());
@@ -191,7 +184,6 @@ public class ConsultationService {
     }
 
     private boolean isAdmin(Authentication authentication) {
-        return authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+        return authentication.getAuthorities().stream().anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
     }
 }
