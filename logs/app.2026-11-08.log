@@ -1,0 +1,313 @@
+2026-11-08 16:11:20.520 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - Starting AgendamentoConsultaMedicaApplication using Java 25.0.3 with PID 10592 (C:\Users\MRX\Documents\Repositorio\agendamento-consulta-medica-clinica\target\classes started by MRX in C:\Users\MRX\Documents\Repositorio\agendamento-consulta-medica-clinica)
+2026-11-08 16:11:20.526 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-11-08 16:11:20.866 [] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-11-08 16:11:21.728 [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-08 16:11:21.816 [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 76 ms. Found 8 JPA repository interfaces.
+2026-11-08 16:11:22.655 [] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-11-08 16:11:22.672 [] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-11-08 16:11:22.675 [] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-11-08 16:11:22.676 [] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-11-08 16:11:22.747 [] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2165 ms
+2026-11-08 16:11:23.173 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-08 16:11:23.564 [] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7ceb6c45
+2026-11-08 16:11:23.566 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-08 16:11:23.590 [] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/clinica (PostgreSQL 18.3)
+2026-11-08 16:11:23.664 [] INFO  o.f.core.internal.command.DbValidate - Successfully validated 0 migrations (execution time 00:00.022s)
+2026-11-08 16:11:23.664 [] WARN  o.f.core.internal.command.DbValidate - No migrations found. Are your locations set up correctly?
+2026-11-08 16:11:23.738 [] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": << Empty Schema >>
+2026-11-08 16:11:23.744 [] INFO  o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2026-11-08 16:11:23.993 [] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-08 16:11:24.135 [] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-11-08 16:11:24.752 [] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-08 16:11:24.861 [] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/clinica]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.3
+	Default catalog/schema: clinica/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-08 16:11:26.533 [] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-08 16:11:26.629 [] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 16:11:26.693 [] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-08 16:11:27.101 [] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name accountService
+2026-11-08 16:11:27.367 [] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-08 16:11:27.975 [] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-11-08 16:11:28.002 [] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-11-08 16:11:28.009 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - Started AgendamentoConsultaMedicaApplication in 8.21 seconds (process running for 9.017)
+2026-11-08 16:12:28.532 [] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-08 16:12:28.533 [] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-11-08 16:12:28.534 [] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-11-08 16:12:28.727 [] INFO  c.c.a.c.AccountAuthenticationController - Receiving login request for user: belga@gmail.com
+2026-11-08 16:13:14.973 [] INFO  c.c.a.c.AccountAuthenticationController - Receiving login request for user: humberto@gmail.com
+2026-11-08 17:00:37.362 [] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=35m13s663ms808µs100ns).
+2026-11-08 17:07:00.310 [] INFO  c.c.a.c.AccountAuthenticationController - Receiving login request for user: humberto@gmail.com
+2026-11-08 17:07:38.791 [] INFO  c.c.a.c.ConsultationController - Receiving request to create consultation: com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationRequest@67ec77cf
+2026-11-08 17:07:38.801 [] INFO  c.c.a.service.ConsultationService - Saving consultation for doctor id 1 and patient id 3
+2026-11-08 17:07:38.825 [] WARN  c.c.a.service.ConsultationService - Schedule conflict detected for doctor id 1 on 2026-11-09 at 15:30
+2026-11-08 17:07:38.830 [] WARN  c.c.a.e.GlobalExceptionHandler - Schedule conflict at /consultations/save: The doctor already has an appointment scheduled for this time.
+2026-11-08 17:08:06.491 [] INFO  c.c.a.c.ConsultationController - Receiving request to create consultation: com.clinica.agendamento_consulta_medica.dto.consultation.ConsultationRequest@5b01253c
+2026-11-08 17:08:06.495 [] INFO  c.c.a.service.ConsultationService - Saving consultation for doctor id 1 and patient id 3
+2026-11-08 17:08:06.539 [] INFO  c.c.a.service.HistoryPatientService - Saving history for consultation id: 9
+2026-11-08 17:08:06.543 [] INFO  c.c.a.service.HistoryPatientService - History saved successfully with id: 9
+2026-11-08 17:08:06.543 [] INFO  c.c.a.service.ConsultationService - Consultation saved successfully with id: 9
+2026-11-08 17:13:05.628 [] INFO  c.c.a.c.AccountAuthenticationController - Receiving login request for user: muzonda@gmail.com
+2026-11-08 17:13:49.440 [] INFO  c.c.a.c.ProcessConsultationController - Receiving request to process consultation with id: 8
+2026-11-08 17:13:49.440 [] INFO  c.c.a.s.ProcessConsultationService - Confirming consultation with id: 8
+2026-11-08 17:13:49.446 [] WARN  c.c.a.service.ConsultationService - User 'muzonda@gmail.com' denied processing of consultation id 8
+2026-11-08 17:13:49.448 [] WARN  c.c.a.e.GlobalExceptionHandler - Access denied at /process/8/waiting: You do not have permission to process this consultation.
+2026-11-08 17:22:26.603 [] INFO  c.c.a.c.ProcessConsultationController - Receiving request to process consultation with id: 8
+2026-11-08 17:22:26.604 [] INFO  c.c.a.s.ProcessConsultationService - Marking consultation as carried out, id: 8
+2026-11-08 17:22:26.608 [] WARN  c.c.a.service.ConsultationService - User 'muzonda@gmail.com' denied processing of consultation id 8
+2026-11-08 17:22:26.609 [] WARN  c.c.a.e.GlobalExceptionHandler - Access denied at /process/8/scheduled: You do not have permission to process this consultation.
+2026-11-08 17:24:24.958 [] INFO  c.c.a.c.AccountAuthenticationController - Receiving login request for user: admin@gmail.com
+2026-11-08 17:25:16.190 [] INFO  c.c.a.c.ProcessConsultationController - Receiving request to process consultation with id: 8
+2026-11-08 17:25:16.192 [] INFO  c.c.a.s.ProcessConsultationService - Marking consultation as carried out, id: 8
+2026-11-08 17:25:16.194 [] WARN  c.c.a.s.ProcessConsultationService - Consultation id 8 is not in SCHEDULED status and cannot be marked as carried out.
+2026-11-08 17:25:16.195 [] WARN  c.c.a.e.GlobalExceptionHandler - Invalid consultation state at /process/8/scheduled: Only consultations in SCHEDULED status can be marked as carried out.
+2026-11-08 17:27:08.779 [] INFO  c.c.a.c.ProcessConsultationController - Receiving request to process consultation with id: 8
+2026-11-08 17:27:08.780 [] INFO  c.c.a.s.ProcessConsultationService - Scheduling consultation with id: 8
+2026-11-08 17:27:08.784 [] WARN  c.c.a.s.ProcessConsultationService - Consultation id 8 is not in CONFIRMED status and cannot be scheduled.
+2026-11-08 17:27:08.786 [] WARN  c.c.a.e.GlobalExceptionHandler - Invalid consultation state at /process/8/confirmed: Only consultations in CONFIRMED status can be scheduled.
+2026-11-08 17:30:31.224 [] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-11-08 17:30:31.231 [] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-11-08 17:30:31.237 [] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 17:30:31.241 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-11-08 17:30:31.243 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-11-08 17:30:36.484 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - Starting AgendamentoConsultaMedicaApplication using Java 25.0.3 with PID 10336 (C:\Users\MRX\Documents\Repositorio\agendamento-consulta-medica-clinica\target\classes started by MRX in C:\Users\MRX\Documents\Repositorio\agendamento-consulta-medica-clinica)
+2026-11-08 17:30:36.487 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-11-08 17:30:36.694 [] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-11-08 17:30:37.437 [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-08 17:30:37.518 [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 73 ms. Found 8 JPA repository interfaces.
+2026-11-08 17:30:38.092 [] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-11-08 17:30:38.109 [] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-11-08 17:30:38.111 [] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-11-08 17:30:38.112 [] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-11-08 17:30:38.174 [] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1629 ms
+2026-11-08 17:30:38.484 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-08 17:30:38.779 [] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@565d7d2f
+2026-11-08 17:30:38.781 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-08 17:30:38.802 [] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/clinica (PostgreSQL 18.3)
+2026-11-08 17:30:38.861 [] INFO  o.f.core.internal.command.DbValidate - Successfully validated 0 migrations (execution time 00:00.014s)
+2026-11-08 17:30:38.861 [] WARN  o.f.core.internal.command.DbValidate - No migrations found. Are your locations set up correctly?
+2026-11-08 17:30:39.068 [] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": << Empty Schema >>
+2026-11-08 17:30:39.073 [] INFO  o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2026-11-08 17:30:39.180 [] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-08 17:30:39.233 [] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-11-08 17:30:39.680 [] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-08 17:30:39.767 [] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/clinica]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.3
+	Default catalog/schema: clinica/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-08 17:30:40.854 [] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-08 17:30:40.928 [] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 17:30:40.992 [] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-08 17:30:41.298 [] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name accountService
+2026-11-08 17:30:41.519 [] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-08 17:30:42.023 [] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-11-08 17:30:42.045 [] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-11-08 17:30:42.052 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - Started AgendamentoConsultaMedicaApplication in 6.226 seconds (process running for 6.743)
+2026-11-08 17:31:15.135 [] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-08 17:31:15.135 [] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-11-08 17:31:15.194 [] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 58 ms
+2026-11-08 17:31:15.340 [] INFO  c.c.a.c.ProcessConsultationController - Receiving request to process consultation with id: 8
+2026-11-08 17:31:15.348 [] INFO  c.c.a.s.ProcessConsultationService - Scheduling consultation with id: 8
+2026-11-08 17:31:15.391 [] WARN  c.c.a.s.ProcessConsultationService - Consultation id 8 is not in CONFIRMED status and cannot be scheduled.
+2026-11-08 17:31:15.405 [] WARN  c.c.a.e.GlobalExceptionHandler - Invalid consultation state at /process/8/confirmed: Only consultations in CONFIRMED status can be scheduled.
+2026-11-08 17:31:32.299 [] INFO  c.c.a.c.ProcessConsultationController - Receiving request to process consultation with id: 8
+2026-11-08 17:31:32.299 [] INFO  c.c.a.s.ProcessConsultationService - Confirming consultation with id: 8
+2026-11-08 17:31:32.304 [] WARN  c.c.a.s.ProcessConsultationService - Consultation id 8 is not in WAITING status and cannot be confirmed.
+2026-11-08 17:31:32.305 [] WARN  c.c.a.e.GlobalExceptionHandler - Invalid consultation state at /process/8/waiting: Only consultations in WAITING status can be confirmed.
+2026-11-08 17:34:29.643 [] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-11-08 17:34:29.647 [] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-11-08 17:34:29.651 [] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 17:34:29.653 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-11-08 17:34:29.658 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-11-08 17:34:33.973 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - Starting AgendamentoConsultaMedicaApplication using Java 25.0.3 with PID 11680 (C:\Users\MRX\Documents\Repositorio\agendamento-consulta-medica-clinica\target\classes started by MRX in C:\Users\MRX\Documents\Repositorio\agendamento-consulta-medica-clinica)
+2026-11-08 17:34:33.975 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-11-08 17:34:34.179 [] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-11-08 17:34:34.879 [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-08 17:34:34.959 [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 70 ms. Found 8 JPA repository interfaces.
+2026-11-08 17:34:35.554 [] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-11-08 17:34:35.566 [] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-11-08 17:34:35.568 [] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-11-08 17:34:35.569 [] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-11-08 17:34:35.626 [] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 1598 ms
+2026-11-08 17:34:35.950 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-08 17:34:36.251 [] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@477523ba
+2026-11-08 17:34:36.253 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-08 17:34:36.274 [] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/clinica (PostgreSQL 18.3)
+2026-11-08 17:34:36.333 [] INFO  o.f.core.internal.command.DbValidate - Successfully validated 0 migrations (execution time 00:00.014s)
+2026-11-08 17:34:36.333 [] WARN  o.f.core.internal.command.DbValidate - No migrations found. Are your locations set up correctly?
+2026-11-08 17:34:36.492 [] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": << Empty Schema >>
+2026-11-08 17:34:36.496 [] INFO  o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2026-11-08 17:34:36.628 [] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-08 17:34:36.692 [] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-11-08 17:34:37.153 [] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-08 17:34:37.254 [] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/clinica]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.3
+	Default catalog/schema: clinica/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-08 17:34:38.379 [] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-08 17:34:38.449 [] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 17:34:38.506 [] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-08 17:34:38.818 [] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name accountService
+2026-11-08 17:34:39.036 [] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-08 17:34:39.516 [] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-11-08 17:34:39.535 [] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-11-08 17:34:39.543 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - Started AgendamentoConsultaMedicaApplication in 6.205 seconds (process running for 6.699)
+2026-11-08 17:36:39.815 [] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-08 17:36:39.815 [] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-11-08 17:36:39.816 [] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2026-11-08 17:36:39.950 [] INFO  c.c.a.c.ProcessConsultationController - Receiving request to process consultation with id: 9
+2026-11-08 17:36:39.957 [] INFO  c.c.a.s.ProcessConsultationService - Confirming consultation with id: 9
+2026-11-08 17:36:39.987 [] INFO  c.c.a.service.HistoryPatientService - Updating history status for consultation id: 9
+2026-11-08 17:36:40.013 [] INFO  c.c.a.service.HistoryPatientService - History status updated successfully for consultation id: 9
+2026-11-08 17:36:40.014 [] INFO  c.c.a.s.ProcessConsultationService - Consultation id 9 confirmed successfully.
+2026-11-08 17:39:00.565 [] INFO  c.c.a.c.ProcessConsultationController - Receiving request to process consultation with id: 9
+2026-11-08 17:39:00.567 [] INFO  c.c.a.s.ProcessConsultationService - Scheduling consultation with id: 9
+2026-11-08 17:39:00.573 [] WARN  c.c.a.s.ProcessConsultationService - Consultation id 9 is not in CONFIRMED status and cannot be scheduled.
+2026-11-08 17:39:00.580 [] WARN  c.c.a.e.GlobalExceptionHandler - Invalid consultation state at /process/9/confirmed: Only consultations in CONFIRMED status can be scheduled.
+2026-11-08 17:40:11.509 [] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-11-08 17:40:11.516 [] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-11-08 17:40:11.525 [] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 17:40:11.528 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-11-08 17:40:11.532 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-11-08 17:41:43.583 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - Starting AgendamentoConsultaMedicaApplication using Java 25.0.3 with PID 6328 (C:\Users\MRX\Documents\Repositorio\agendamento-consulta-medica-clinica\target\classes started by MRX in C:\Users\MRX\Documents\Repositorio\agendamento-consulta-medica-clinica)
+2026-11-08 17:41:43.589 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-11-08 17:41:43.882 [] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-11-08 17:41:45.035 [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-08 17:41:45.308 [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 253 ms. Found 8 JPA repository interfaces.
+2026-11-08 17:41:46.244 [] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-11-08 17:41:46.266 [] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-11-08 17:41:46.270 [] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-11-08 17:41:46.271 [] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-11-08 17:41:46.360 [] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2693 ms
+2026-11-08 17:41:46.794 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-08 17:41:47.089 [] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@39652a30
+2026-11-08 17:41:47.091 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-08 17:41:47.120 [] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/clinica (PostgreSQL 18.3)
+2026-11-08 17:41:47.203 [] INFO  o.f.core.internal.command.DbValidate - Successfully validated 0 migrations (execution time 00:00.022s)
+2026-11-08 17:41:47.203 [] WARN  o.f.core.internal.command.DbValidate - No migrations found. Are your locations set up correctly?
+2026-11-08 17:41:47.427 [] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": << Empty Schema >>
+2026-11-08 17:41:47.438 [] INFO  o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2026-11-08 17:41:47.736 [] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-08 17:41:47.831 [] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-11-08 17:41:48.573 [] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-08 17:41:48.712 [] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/clinica]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.3
+	Default catalog/schema: clinica/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-08 17:41:50.706 [] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-08 17:41:50.838 [] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 17:41:51.025 [] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-08 17:41:51.620 [] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name accountService
+2026-11-08 17:41:51.906 [] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-08 17:41:52.607 [] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-11-08 17:41:52.631 [] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-11-08 17:41:52.642 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - Started AgendamentoConsultaMedicaApplication in 10.004 seconds (process running for 10.803)
+2026-11-08 17:42:47.019 [] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-08 17:42:47.020 [] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-11-08 17:42:47.024 [] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+2026-11-08 17:42:47.360 [] INFO  c.c.a.c.ProcessConsultationController - Receiving request to process consultation with id: 9
+2026-11-08 17:42:47.377 [] INFO  c.c.a.s.ProcessConsultationService - Scheduling consultation with id: 9
+2026-11-08 17:42:47.507 [] INFO  c.c.a.service.HistoryPatientService - Updating history status for consultation id: 9
+2026-11-08 17:42:47.605 [] INFO  c.c.a.service.HistoryPatientService - History status updated successfully for consultation id: 9
+2026-11-08 17:42:47.606 [] INFO  c.c.a.s.ProcessConsultationService - Consultation id 9 scheduled successfully.
+2026-11-08 17:44:41.145 [] INFO  c.c.a.c.ProcessConsultationController - Receiving request to process consultation with id: 8
+2026-11-08 17:44:41.146 [] INFO  c.c.a.s.ProcessConsultationService - Confirming consultation with id: 8
+2026-11-08 17:44:41.153 [] INFO  c.c.a.service.HistoryPatientService - Updating history status for consultation id: 8
+2026-11-08 17:44:41.157 [] INFO  c.c.a.service.HistoryPatientService - History status updated successfully for consultation id: 8
+2026-11-08 17:44:41.157 [] INFO  c.c.a.s.ProcessConsultationService - Consultation id 8 confirmed successfully.
+2026-11-08 17:47:09.992 [] INFO  c.c.a.c.AccountAuthenticationController - Receiving login request for user: helena@gmail.com
+2026-11-08 17:48:30.299 [] INFO  c.c.a.c.ProcessConsultationController - Receiving request to process consultation with id: 8
+2026-11-08 17:48:30.300 [] INFO  c.c.a.s.ProcessConsultationService - Canceling consultation with id: 8
+2026-11-08 17:48:30.306 [] WARN  c.c.a.s.ProcessConsultationService - Consultation id 8 is already CONFIRMED and cannot be canceled.
+2026-11-08 17:48:30.314 [] WARN  c.c.a.e.GlobalExceptionHandler - Invalid consultation state at /process/8/canceled: Consultations that are already carried out or canceled cannot be canceled.
+2026-11-08 17:59:23.949 [] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-11-08 17:59:23.957 [] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-11-08 17:59:23.967 [] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 17:59:23.972 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-11-08 17:59:23.998 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-11-08 17:59:32.312 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - Starting AgendamentoConsultaMedicaApplication using Java 25.0.3 with PID 12352 (C:\Users\MRX\Documents\Repositorio\agendamento-consulta-medica-clinica\target\classes started by MRX in C:\Users\MRX\Documents\Repositorio\agendamento-consulta-medica-clinica)
+2026-11-08 17:59:32.316 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - No active profile set, falling back to 1 default profile: "default"
+2026-11-08 17:59:32.623 [] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 9.1.0.Final
+2026-11-08 17:59:33.866 [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-11-08 17:59:34.132 [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 249 ms. Found 8 JPA repository interfaces.
+2026-11-08 17:59:35.207 [] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2026-11-08 17:59:35.228 [] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2026-11-08 17:59:35.231 [] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-11-08 17:59:35.231 [] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-11-08 17:59:35.336 [] INFO  o.s.b.w.c.s.WebApplicationContextInitializer - Root WebApplicationContext: initialization completed in 2934 ms
+2026-11-08 17:59:35.796 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-11-08 17:59:36.093 [] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@40c8067
+2026-11-08 17:59:36.096 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-11-08 17:59:36.130 [] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:postgresql://localhost:5432/clinica (PostgreSQL 18.3)
+2026-11-08 17:59:36.241 [] INFO  o.f.core.internal.command.DbValidate - Successfully validated 0 migrations (execution time 00:00.043s)
+2026-11-08 17:59:36.241 [] WARN  o.f.core.internal.command.DbValidate - No migrations found. Are your locations set up correctly?
+2026-11-08 17:59:36.288 [] INFO  o.f.core.internal.command.DbMigrate - Current version of schema "public": << Empty Schema >>
+2026-11-08 17:59:36.293 [] INFO  o.f.core.internal.command.DbMigrate - Schema "public" is up to date. No migration necessary.
+2026-11-08 17:59:36.516 [] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-11-08 17:59:36.621 [] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-11-08 17:59:37.677 [] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-11-08 17:59:37.856 [] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/clinica]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 18.3
+	Default catalog/schema: clinica/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-11-08 17:59:40.286 [] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-11-08 17:59:40.440 [] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 17:59:40.592 [] INFO  o.s.d.j.r.q.QueryEnhancerFactories - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-11-08 17:59:41.132 [] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name accountService
+2026-11-08 17:59:41.430 [] WARN  o.s.b.j.a.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-11-08 17:59:42.172 [] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2026-11-08 17:59:42.196 [] INFO  o.s.boot.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2026-11-08 17:59:42.205 [] INFO  c.c.a.AgendamentoConsultaMedicaApplication - Started AgendamentoConsultaMedicaApplication in 10.919 seconds (process running for 11.734)
+2026-11-08 18:07:17.440 [] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-11-08 18:07:17.441 [] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-11-08 18:07:17.444 [] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 3 ms
+2026-11-08 18:07:17.861 [] INFO  c.c.a.c.ProcessConsultationController - Receiving request to process consultation with id: 8
+2026-11-08 18:07:17.943 [] INFO  c.c.a.s.ProcessConsultationService - Canceling consultation with id: 8
+2026-11-08 18:07:18.019 [] INFO  c.c.a.service.HistoryPatientService - Updating history status for consultation id: 8
+2026-11-08 18:07:18.073 [] INFO  c.c.a.service.HistoryPatientService - History status updated successfully for consultation id: 8
+2026-11-08 18:07:18.074 [] INFO  c.c.a.s.ProcessConsultationService - Consultation id 8 canceled successfully.
+2026-11-08 18:07:23.143 [] INFO  o.s.boot.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-11-08 18:07:23.154 [] INFO  o.s.boot.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-11-08 18:07:23.165 [] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-11-08 18:07:23.170 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-11-08 18:07:23.178 [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

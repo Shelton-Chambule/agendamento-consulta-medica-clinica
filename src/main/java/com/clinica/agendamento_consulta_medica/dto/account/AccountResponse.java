@@ -7,12 +7,12 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class AccountAdminResponse {
+public class AccountResponse {
 
     private Long id;
     private String login;
 
-    public AccountAdminResponse(Account account) {
+    public AccountResponse(Account account) {
         this.id = account.getId();
         this.login = account.getLogin();
     }

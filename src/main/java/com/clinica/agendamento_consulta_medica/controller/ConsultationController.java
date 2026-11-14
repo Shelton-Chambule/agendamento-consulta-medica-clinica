@@ -26,7 +26,7 @@ public class ConsultationController {
     @PostMapping("/save")
     public ResponseEntity<ConsultationResponse>  createConsultation(@Valid @RequestBody ConsultationRequest consultation){
         log.info("Receiving request to create consultation: {}", consultation);
-        return ResponseEntity.status(HttpStatus.CREATED).body(consultationService.save(consultation));
+        return ResponseEntity.status(HttpStatus.CREATED).body(consultationService.createConsultation(consultation));
     }
 
     @GetMapping("/getAll")
@@ -54,6 +54,6 @@ public class ConsultationController {
                                                                    @Valid @RequestBody ConsultationRequest consultation,
                                                                    Authentication authentication){
         log.info("Receiving request to update consultation with id: {}", consultationId);
-        return ResponseEntity.ok().body(consultationService.update(consultationId, consultation, authentication));
+        return ResponseEntity.ok().body(consultationService.updateConsultation(consultationId, consultation, authentication));
     }
 }

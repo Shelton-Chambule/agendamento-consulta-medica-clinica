@@ -1,8 +1,9 @@
 package com.clinica.agendamento_consulta_medica.service;
-import com.clinica.agendamento_consulta_medica.dto.account.AccountAdminRequest;
-import com.clinica.agendamento_consulta_medica.dto.account.AccountAdminResponse;
+import com.clinica.agendamento_consulta_medica.dto.account.AccountRequest;
+import com.clinica.agendamento_consulta_medica.dto.account.AccountResponse;
 import com.clinica.agendamento_consulta_medica.entity.Account;
 import com.clinica.agendamento_consulta_medica.entity.enums.AccountRole;
+import com.clinica.agendamento_consulta_medica.exception.ResourceNotFoundException;
 import com.clinica.agendamento_consulta_medica.mapper.AccountMapper;
 import com.clinica.agendamento_consulta_medica.repository.AccountRepository;
 import com.clinica.agendamento_consulta_medica.exception.UniqueLoginException;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.clinica.agendamento_consulta_medica.exception.AccessDeniedException;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -24,6 +26,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccountMapper accountMapper;
+    private final CurrentUserService currentUserService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -35,7 +38,8 @@ public class AccountService implements UserDetailsService {
                 });
     }
 
-    public AccountAdminResponse createAccountAdmin(AccountAdminRequest request, Authentication authentication) {
+    @Transactional
+    public AccountResponse createAccountAdmin(AccountRequest request, Authentication authentication) {
         log.info("Creating admin account with login: {}", request.getLogin());
 
         if (accountRepository.existsByLogin(request.getLogin())) {
@@ -62,4 +66,23 @@ public class AccountService implements UserDetailsService {
 
     }
 
+    @Transactional
+    public AccountResponse updateAccount(Long accountId,AccountRequest accountRequest){
+        log.info("Updating account with id: {}", accountId);
+
+        accountRepository.findById(accountId).orElseThrow(() ->{
+            log.warn("Account  not found with id: {}",accountId);
+            return    new ResourceNotFoundException(accountId);
+        });
+
+        Account account = currentUserService.getCurrentUser();
+
+        account.setAccountRole(AccountRole.ADMIN);
+        account.setLogin(accountRequest.getLogin());
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+
+        Account saveAccount = accountRepository.save(account);
+        log.info("Account id {} updated successfully.", accountId);
+        return accountMapper.toResponse(saveAccount);
+    }
 }

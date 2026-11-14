@@ -1,6 +1,6 @@
 package com.clinica.agendamento_consulta_medica.controller;
-import com.clinica.agendamento_consulta_medica.dto.account.AccountAdminRequest;
-import com.clinica.agendamento_consulta_medica.dto.account.AccountAdminResponse;
+import com.clinica.agendamento_consulta_medica.dto.account.AccountRequest;
+import com.clinica.agendamento_consulta_medica.dto.account.AccountResponse;
 import com.clinica.agendamento_consulta_medica.dto.token.TokenResponse;
 import com.clinica.agendamento_consulta_medica.entity.Account;
 import com.clinica.agendamento_consulta_medica.service.AccountService;
@@ -37,7 +37,7 @@ public class AccountAuthenticationController {
     }
 
     @PostMapping("/register/admin")
-    public  ResponseEntity<AccountAdminResponse> createAccountAdmin(@Valid @RequestBody  AccountAdminRequest request, Authentication authentication) {
+    public  ResponseEntity<AccountResponse> createAccountAdmin(@Valid @RequestBody AccountRequest request, Authentication authentication) {
         log.info("Receiving request to create admin account: {}", request);
         return ResponseEntity.status(HttpStatus.CREATED).body(accountService.createAccountAdmin(request,authentication));
     }

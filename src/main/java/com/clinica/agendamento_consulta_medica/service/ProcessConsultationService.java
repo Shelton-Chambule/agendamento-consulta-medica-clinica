@@ -6,10 +6,10 @@ import com.clinica.agendamento_consulta_medica.exception.ProcessConsultation;
 import com.clinica.agendamento_consulta_medica.mapper.ConsultationMapper;
 import com.clinica.agendamento_consulta_medica.repository.ConsultationRepository;
 import com.clinica.agendamento_consulta_medica.repository.DoctorRepository;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
